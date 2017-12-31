@@ -10,6 +10,6 @@ class Model_test extends CI_Model {
         public function getService()
         {
                 $query=$this->db->query("select *from service_request");
-		        return $query->result;
+		        return $query->result();
         }
 }
