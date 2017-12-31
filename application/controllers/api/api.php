@@ -4,7 +4,10 @@ class Api extends CI_Controller {
 
 	  public function __construct()
 	  {
-		  
+		  parent::__construct();
+    	 $this->load->helper('url');
+		 $this->load->library('session');
+		 $this->load->library('form_validation');	
 			//  $check=$this->check_valid();
 			$check=1;
 			  if($check=='false')

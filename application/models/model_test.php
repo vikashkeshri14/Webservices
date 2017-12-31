@@ -3,7 +3,9 @@ class Model_test extends CI_Model {
 
  public function __construct()
         {
-                $this->load->database();
+          parent::__construct();
+	      $this->load->helper('url');	
+	      $this->load->database();		
         }
         public function getService()
         {
