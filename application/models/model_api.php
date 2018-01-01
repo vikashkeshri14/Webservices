@@ -35,16 +35,19 @@ class Model_api extends CI_Model {
 	  $this->db->insert('user', $ins); 
 	  $insert_id = $this->db->insert_id();
 	 // $time=rand(1000,9999);
-	  $token_email['email_token']=$this->token();
+	  $token_email=$this->token();
+	  $token_email['email_token']=$token_email;
 	  $token_email['user_id']=$insert_id;
 	  $token_email['created']=$created;
-      $this->db->insert('user', $token_email); 
-	  
-	  $token_phone['email_token']=$this->token();
+      $this->db->insert('email_token', $token_email); 
+	  mail("vkeshri.14@gmail.com","Verification token","Your token id is ".$token_email.", this is valid for 10min");
+	  $mobile_token=$this->token();
+	  $token_phone['mobile_token']=$mobile_token;
 	  $token_phone['user_id']=$insert_id;
 	  $token_phone['created']=$created;
-      $this->db->insert('user', $token_phone); 
-	  
+      $this->db->insert('mobile_token', $token_phone); 
+	  return true;
+	  //sms code is here
 	}
 	else
 	{
@@ -74,6 +77,23 @@ class Model_api extends CI_Model {
   public function token()
   {
 	  return rand(1000,9999);
+  }
+  public function check_email_token()
+  {
+	  if($this->input->post("email_token") && $this->input->post("user_id"))  
+		 {
+			 $query=$this->db->query(" select * from email_token order by email_token_id desc limit 1");
+			 $value=$query->result()
+		 }
+  }
+  
+  public function check_mobile_token()
+  {
+	  if($this->input->post("mobile_token") && $this->input->post("user_id"))  
+		 {
+			 $query=$this->db->query(" select * from mobile_token order by token_id desc limit 1");
+			 $value=$query->result()
+		 }
   }
 
 }

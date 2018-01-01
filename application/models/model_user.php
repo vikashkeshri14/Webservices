@@ -10,6 +10,7 @@
    
   public function createuser()//--Create User Function for Creating Admin Users
 	{
+<<<<<<< HEAD
 	try 
 		{	
 		  if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id') &&  $this->input->post('password'))
@@ -127,6 +128,38 @@
 			 /* Need to add the Logger class */
 			echo 'Message: ' .$y->getMessage();
 		 }
+=======
+	  $password=$this->password_encrypt($this->input->post('password'));
+	  $ins['username']=$this->input->post('username');
+	  $ins['email_id']=$this->input->post('email_id');
+	  $ins['phone_no']=$this->input->post('phone_no');
+	  $ins['role_id']=$this->input->post('role_id');
+	  $ins['password']=$password;
+	  if($this->input->post('mobile_token'))
+	  $ins['mobile_token']=$this->input->post('mobile_token');
+	  if($this->input->post('iqama_id'))
+	  $ins['iqama_id']=$this->input->post('iqama_id');
+	  if($this->input->post('mobile_token'))
+	  $ins['comercial_registration']=$this->input->post('comercial_registration');
+	  if($this->input->post('city'))
+	  $ins['city']=$this->input->post('city');
+	  $ins['created']=$created;
+	  $this->db->insert('user', $ins); 
+	  $insert_id = $this->db->insert_id();
+	 // $time=rand(1000,9999);
+	  $token_email['email_token']=$this->token();
+	  $token_email['user_id']=$insert_id;
+	  $token_email['created']=$created;
+      $this->db->insert('user', $token_email); 
+	  
+	  $token_phone['email_token']=$this->token();
+	  $token_phone['user_id']=$insert_id;
+	  $token_phone['created']=$created;
+      $this->db->insert('user', $token_phone); 
+	  
+	  
+	  
+>>>>>>> 5ee4c995453d4e7b6fee5b3f5573d694bce62f46
 	}
 	
 	public function password_encrypt($pass)
