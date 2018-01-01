@@ -45,6 +45,8 @@ class Model_user extends CI_Model {
 	  $token_phone['created']=$created;
       $this->db->insert('user', $token_phone); 
 	  
+	  
+	  
 	}
 	else
 	{

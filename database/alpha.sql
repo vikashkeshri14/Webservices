@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 01, 2018 at 04:49 AM
+-- Generation Time: Dec 31, 2017 at 03:44 AM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.11
 
@@ -277,7 +277,7 @@ CREATE TABLE `user` (
   `role_id` int(11) NOT NULL,
   `username` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `gender` enum('1','2') COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '1=Male, 2=Female',
-  `mobile_token` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Mobile token id',
+  `user_token` text COLLATE utf8_unicode_ci NOT NULL,
   `email_id` text COLLATE utf8_unicode_ci NOT NULL,
   `phone_no` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `iqama_id` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -288,9 +288,7 @@ CREATE TABLE `user` (
   `country` int(11) DEFAULT NULL,
   `city` int(11) DEFAULT NULL,
   `status` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0' COMMENT '0=Disable,1=Enable',
-  `email_token_verify` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0' COMMENT '0=Token not verify,1=Token verify',
-  `phone_token_verify` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0' COMMENT '0=Token not verify,1=Token verify',
-  `created` timestamp NULL DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -298,8 +296,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `role_id`, `username`, `gender`, `mobile_token`, `email_id`, `phone_no`, `iqama_id`, `address`, `user_status`, `comercial_registration`, `password`, `country`, `city`, `status`, `email_token_verify`, `phone_token_verify`, `created`, `updated`) VALUES
-(1, 2, 'vikash', '1', 'jdsjfkjsd fsahfkjsndf snksd sdc smobile token', 'vikash@gmail.com', '98766463734', '236874533', 'test ihi swr\'xw\'e cr\'ew xew\r\n frewr;h ewew; h', '1', '3334', 'test', NULL, NULL, '0', '0', '0', '2017-12-27 08:00:00', '2017-12-28 04:42:17');
+INSERT INTO `user` (`user_id`, `role_id`, `username`, `gender`, `user_token`, `email_id`, `phone_no`, `iqama_id`, `address`, `user_status`, `comercial_registration`, `password`, `country`, `city`, `status`, `created`, `updated`) VALUES
+(1, 2, 'vikash', '1', 'jdsjfkjsd fsahfkjsndf snksd sdc smobile token', 'vikash@gmail.com', '98766463734', '236874533', 'test ihi swr\'xw\'e cr\'ew xew\r\n frewr;h ewew; h', '1', '3334', 'test', NULL, NULL, '0', '2017-12-27 00:00:00', '2017-12-28 04:42:17');
 
 -- --------------------------------------------------------
 
