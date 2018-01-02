@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Api extends CI_Controller {
-
 	  public function __construct()
 	  {
 		  parent::__construct();
@@ -23,6 +22,7 @@ class Api extends CI_Controller {
 		  
 		 echo json_encode($this->model_test->getService());
 	  }
+	
 	  public function  registration()
 	  {
 		  if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id'))
@@ -51,6 +51,23 @@ class Api extends CI_Controller {
 			echo json_encode($data);  
 		  }
 	  }
+	 
+	  public function check_token()
+	  {
+		if($this->input->post("email_token") && $this->input->post("mobile_token") && $this->input->post("user_id"))  
+		 {
+			$email_token=$this->model_api->check_email_token(); 
+			$mobile_token=$this->model_api->check_mobile_token(); 
+		 }
+		 else
+		 {
+			$data['request']="Error";
+			$data['message']="Check your request";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		 }
+	  }
+	  
 	  public function check_valid()
 	  {
 		 if($this->input->post('username')!='ApiUsername' && $this->input->post('ApiPassword')!='ApiPassword')

@@ -78,5 +78,12 @@ class Model_api extends CI_Model {
   {
 	  return rand(1000,9999);
   }
+  public function check_email_token()
+  {
+	  if($this->input->post("email_token") && $this->input->post("user_id"))  
+		 {
+			 
+		 }
+  }
 
 }
