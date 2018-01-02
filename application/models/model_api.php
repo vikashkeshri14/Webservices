@@ -46,6 +46,7 @@ class Model_api extends CI_Model {
 	  $token_phone['user_id']=$insert_id;
 	  $token_phone['created']=$created;
       $this->db->insert('mobile_token', $token_phone); 
+	  return true;
 	  //sms code is here
 	}
 	else
