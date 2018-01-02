@@ -57,7 +57,22 @@ class Api extends CI_Controller {
 		if($this->input->post("email_token") && $this->input->post("mobile_token") && $this->input->post("user_id"))  
 		 {
 			$email_token=$this->model_api->check_email_token(); 
-			$mobile_token=$this->model_api->check_mobile_token(); 
+			$mobile_token=$this->model_api->check_mobile_token();
+			if($email_token && $mobile_token)
+			{
+				$data['request']="Success";
+				$data['message']="Verification code match";
+				$data['request_id']=1;
+				echo json_encode($data);
+			}
+			else
+			{
+				$data['request']="Error";
+				$data['message']="Verification code does not match";
+				$data['request_id']=0;
+				echo json_encode($data);
+			}
+			 
 		 }
 		 else
 		 {

@@ -82,7 +82,17 @@ class Model_api extends CI_Model {
   {
 	  if($this->input->post("email_token") && $this->input->post("user_id"))  
 		 {
-			 
+			 $query=$this->db->query(" select * from email_token order by email_token_id desc limit 1");
+			 $value=$query->result()
+		 }
+  }
+  
+  public function check_mobile_token()
+  {
+	  if($this->input->post("mobile_token") && $this->input->post("user_id"))  
+		 {
+			 $query=$this->db->query(" select * from mobile_token order by token_id desc limit 1");
+			 $value=$query->result()
 		 }
   }
 
