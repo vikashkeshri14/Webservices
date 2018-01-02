@@ -60,10 +60,39 @@ class Api extends CI_Controller {
 			$mobile_token=$this->model_api->check_mobile_token();
 			if($email_token && $mobile_token)
 			{
-				$data['request']="Success";
-				$data['message']="Verification code match";
-				$data['request_id']=1;
-				echo json_encode($data);
+				$date=date('Y-m-d h:i:s');
+				$min_email=$email_token[0]->created;
+				$min_phone=$mobile_token[0]->created;
+				$registration_date = date_create($date); //Replace static date with your database field
+				$expiration_date = date_create($min_email); //Replace static date with your database field
+				$email=date_diff($registration_date,$expiration_date);
+				$email_min=$email->format("%i");
+				$registration_date_phone = date_create($date); //Replace static date with your database field
+				$expiration_date_phone = date_create($min_phone); //Replace static date with your database field
+				$phone=date_diff($registration_date_phone,$expiration_date_phone);
+                $phone_min=$phone->format("%i");
+				if($email_min<=10)
+				{
+				  $data['request']="Error";
+				  $data['message']="Verification code does not match";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+				}
+				elseif($phone_min<=10)
+				{
+				  $data['request']="Error";
+				  $data['message']="Verification code does not match";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+
+				}
+				else
+				{
+				  $data['request']="Success";
+				  $data['message']="Verification code match";
+				  $data['request_id']=1;
+				  echo json_encode($data);
+				}
 			}
 			else
 			{
