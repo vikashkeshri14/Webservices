@@ -64,16 +64,7 @@ class Model_api extends CI_Model {
     return password_hash($pass, PASSWORD_BCRYPT, $options);
   }
   
-  public function password_verify()
-  {
-	  $hash = '$2y$11$b1Kblxw5UH6xojHn09z9HONcs/IYpzegWhxjsK3vx61eWeeSwdAves';
-
-		if (password_verify('vikash', $hash)) {
-			return true;
-		} else {
-			return false;
-		}
-  }
+  
   public function token()
   {
 	  return rand(1000,9999);
@@ -83,7 +74,7 @@ class Model_api extends CI_Model {
 	  if($this->input->post("email_token") && $this->input->post("user_id"))  
 		 {
 			 $query=$this->db->query(" select * from email_token order by email_token_id desc limit 1");
-			 $value=$query->result()
+			 $value=$query->result();
 		 }
   }
   
@@ -92,19 +83,45 @@ class Model_api extends CI_Model {
 	  if($this->input->post("mobile_token") && $this->input->post("user_id"))  
 		 {
 			 $query=$this->db->query(" select * from mobile_token order by token_id desc limit 1");
-			 $value=$query->result()
+			 $value=$query->result();
 		 }
   }
   public function login_check()
   {
 	   if($this->input->post('username') && $this->input->post('password'))
 	   {
-		   
+		   $query=$this->db->query("select * from user where  username='".trim($this->input->post('username'))."'");
+		   $value=$query->result();
+		   if($value){
+		    $check_password=$this->password_verify($this->input->post('password'),$value[0]->password);
+			if($check_password)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		   }
+		   else
+		   {
+			   return false;
+		   }
 	   }
 	   else
 	   {
 		   return false;
 	   }
   }
+  public function password_verify($password,$hash)
+  {
+	 // $hash = '$2y$11$b1Kblxw5UH6xojHn09z9HONcs/IYpzegWhxjsK3vx61eWeeSwdAves';
 
+		if (password_verify($password, $hash)) {
+			return true;
+		} else {
+			return false;
+		}
+  }
+  
 }
