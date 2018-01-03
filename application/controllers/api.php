@@ -25,24 +25,25 @@ class Api extends CI_Controller {
 	
 	  public function  registration()
 	  {
-		  if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id'))
-		  {
-			  $res=$this->model_api->registration();
-			  if($res)
-			  {
-				  $data['request']="Success";
-				  $data['message']="Data inserted into the system. Please check the email and phone to verify your identity";
-				  $data['request_id']=1;
-				  echo json_encode($data);
-			  }
-			  else
-			  {
-				  $data['request']="Error";
-				  $data['message']="Check your request";
-				  $data['request_id']=0;
-				  echo json_encode($data); 
-			  }
-		  }
+		  
+			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id'))
+			{
+				$res=$this->model_api->registration();
+				if($res)
+				{
+					$data['request']="Success";
+					$data['message']="Data inserted into the system. Please check the email and phone to verify your identity";
+					$data['request_id']=1;
+					echo json_encode($data);
+				}
+				else
+				{
+					$data['request']="Error";
+					$data['message']="Check your request";
+					$data['request_id']=0;
+					echo json_encode($data); 
+				}
+			}
 		  else
 		  {
 			$data['request']="Error";
@@ -122,6 +123,21 @@ class Api extends CI_Controller {
 		 {
 			 return true;
 		 }
+	  }
+	  
+	  public function login()
+	  {
+		  if($this->input->post('username') && $this->input->post('password'))
+		  {
+			  $valid=$this->model_api->login_check();
+		  }
+		  else
+		  {
+			$data['request']="Error";
+			$data['message']="Username or password entered wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
 	  }
 	  public function check_password()
 	  {
