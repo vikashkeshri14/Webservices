@@ -1,4 +1,5 @@
   <?php
+  include('model_log.php');
   class Model_user extends CI_Model {
   
 	public function __construct()
@@ -27,7 +28,7 @@
 				
 				if($this->input->post('city'))	  
 				$ins['city']=$this->input->post('city');	
-			
+				$ins['status']=$this->input->post('status');
 				$ins['created']=$created;
 				
 				/*--Inserting the record to Database..*/
@@ -41,7 +42,8 @@
 	  catch(Exception $e)//catch exception
 		  {
 			  /* Need to add the Logger class */
-			echo 'Message: ' .$e->getMessage();
+			//echo 'Message: ' .$e->getMessage();
+			logwrite( 'model_user.php >> CreateUser >> '.$e->getMessage());
 		  }
 	}   
       
@@ -66,7 +68,7 @@
 				if($this->input->post('city'))	  
 				$ins['city']=$this->input->post('city');	
 			
-				$ins['created']=$created;
+				$ins['updated']=$updated;
 				if($this->input->post('hdid'))
 				{
 					$id=$this->input->post('hdid');
@@ -87,25 +89,26 @@
 	  catch(Exception $e)//catch exception
 		  {
 			  /* Need to add the Logger class */
-			echo 'Message: ' .$e->getMessage();
+			logwrite( 'model_user.php >> updateuser >> '.$e->getMessage());
 		  }
    } 
    
-	 public function getusers()
+	 public function getusers()//--Getting complete list of users
 	 {
 		 try
 		 {
 			$q = $this->db->get('user');
 			$data = $q->result_array();
 		 }
-		 catch(Exception $r)
+		 catch(Exception $e)
 		 {
 			 /* Need to add the Logger class */
-			echo 'Message: ' .$r->getMessage();
+			//echo 'Message: ' .$r->getMessage();
+			logwrite( 'model_user.php >> getusers >> '.$e->getMessage());
 		 }
 		 
 	 }
-	 public function deleteRecord($id) //-Deleting the record from the table
+	 public function deleteRecord() //-Deleting the record from the table
 	 {
 		 try
 		 {
@@ -125,10 +128,67 @@
 		catch(Exception $y)
 		 {
 			 /* Need to add the Logger class */
-			echo 'Message: ' .$y->getMessage();
+			logwrite( 'model_user.php >> deleteRecord >> '.$y->getMessage());
 		 }
 	}
 	
+	
+	public function getuserbyid()//-Get User by ID
+	 {
+		 try
+		 {
+			if($this->input->post('hdid'))
+			{
+				$this->db->where('id', $id);
+				$q = $this->db->get('user');
+				$data = $q->result_array();
+			}
+			else
+			{
+				return false;
+			}
+		 }
+		 catch(Exception $e)
+		 {
+			 /* Need to add the Logger class */
+			logwrite( 'model_user.php >> getuserbyid >> '.$e->getMessage());
+		 }
+		 
+	 }
+	 
+public function enabledisableuser()//--Enable/Disable users
+   {
+	    try 
+		{	
+				
+		  if($this->input->post('status'))
+			{
+
+				$ins['status']=$this->input->post('status');
+				if($this->input->post('hdid'))
+				{
+					$id=$this->input->post('hdid');
+				/*--Updating the record to Database..*/
+				$this->db->where('id', $id);
+				$this->db->update('user', $ins); 
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			  {
+				  return false;
+			  }		
+		}	  
+	  catch(Exception $e)//catch exception
+		  {
+			  /* Need to add the Logger class */
+			logwrite( 'model_user.php >> enabledisableuser >> '.$e->getMessage());
+		  }
+   } 
+	 
 	public function password_encrypt($pass)
 	{
 		//$options = ['cost' => 11	  ];
