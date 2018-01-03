@@ -161,8 +161,17 @@ class Model_api extends CI_Model {
 			else
 			{
 				return false;
-			}      
+			}    
+		   }
+	      else
+	      {
+		      return false;
+	      }
       }
+	      else
+	      {
+		      return false;
+	      }
   }
   public function password_verify($password,$hash)
   {
