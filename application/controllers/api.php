@@ -214,6 +214,36 @@ class Api extends CI_Controller {
 			echo json_encode($data);  
 		  }
 	  }
+	  public function change_password()
+	  {
+	     try{
+              if($this->input->post('user_id') && $this->input->post('usertoken'))
+	      {
+		 $pass=$this->model_api->change_password();   
+		 if($pass)
+		 {
+			$data['request']="success";
+			$data['message']="Password successfully updated";
+			$data['request_id']=1;
+			echo json_encode($data); 
+		 }
+		 else
+		 {
+			$data['request']="Error";
+			$data['message']="Entered data wrong";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		 }
+	      }
+	     }
+            catch (Exception $e)
+		  {
+			$data['request']="Error";
+			$data['message']="Entered data wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');
