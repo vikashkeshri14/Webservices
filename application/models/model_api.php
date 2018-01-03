@@ -142,6 +142,28 @@ class Model_api extends CI_Model {
 		   return false;
 	   }
   }
+  public function change_password()
+  {
+      if($this->input->post('user_id') && $this->input->post('usertoken'))
+      {
+	  $query=$this->db->query("select * from user where  user_id='".$this->input->post('user_id')."'");
+		   $value=$query->result();
+		   if($value){
+		    $check_password=$this->password_verify($this->input->post('oldpassword'),$value[0]->password);
+			if($check_password)
+			{
+				$password=$this->password_encrypt($this->input->post('newpassword'));
+				$upd['password']=$password;
+				$this->db->where('user_id',$this->input->post('user_id'));
+				$this->db->update('user',$upd);
+				return true;
+			}
+			else
+			{
+				return false;
+			}      
+      }
+  }
   public function password_verify($password,$hash)
   {
 	 // $hash = '$2y$11$b1Kblxw5UH6xojHn09z9HONcs/IYpzegWhxjsK3vx61eWeeSwdAves';
