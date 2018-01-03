@@ -95,5 +95,16 @@ class Model_api extends CI_Model {
 			 $value=$query->result()
 		 }
   }
+  public function login_check()
+  {
+	   if($this->input->post('username') && $this->input->post('password'))
+	   {
+		   
+	   }
+	   else
+	   {
+		   return false;
+	   }
+  }
 
 }
