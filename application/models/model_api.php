@@ -12,6 +12,35 @@ class Model_api extends CI_Model {
 	$query=$this->db->query("select *from service_request");
 	return $query->result();
   }
+  public function editAccount()	
+  {
+   if($this->input->post('tokenId') && $this->input->post('user_id'))
+	{
+	  $password=$this->password_encrypt($this->input->post('password'));
+	  $upd['email_id']=$this->input->post('email_id');
+	  $upd['phone_no']=$this->input->post('phone_no');
+	  $upd['password']=$password;
+	  
+	  if($this->input->post('iqama_id'))
+	  $upd['iqama_id']=$this->input->post('iqama_id');
+	  if($this->input->post('mobile_token'))
+	  $upd['comercial_registration']=$this->input->post('comercial_registration');
+	  if($this->input->post('city'))
+	  $upd['city']=$this->input->post('city');
+	  if($this->input->post('country'))
+	  $upd['city']=$this->input->post('country');
+	  $this->db->where('user_id', $this->input->post('user_id')); 
+	  $this->db->update('user', $upd); 
+	  
+	  return true;
+	  //sms code is here
+	}
+	else
+	{
+		return false;
+	}
+	
+  }
   public function registration()
   {
 	$created=date('Y-m-d h:i:s');
