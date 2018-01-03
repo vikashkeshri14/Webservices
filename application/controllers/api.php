@@ -26,7 +26,7 @@ class Api extends CI_Controller {
 		     $data['data']=$this->model_test->getService();
 		     $data['request_id']=1;
 		     echo json_encode($data);
-		// echo json_encode();
+		/// echo json_encode();
 		}
 		else
 		{
