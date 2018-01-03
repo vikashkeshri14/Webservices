@@ -19,13 +19,60 @@ class Api extends CI_Controller {
 	  
 	  public function getService()
 	  {
-		  
-		 echo json_encode($this->model_test->getService());
+		try
+		{
+		if($this->input->post("usertoken")){ 
+		    $data['request']="Success";
+		     $data['data']=$this->model_test->getService();
+		     $data['request_id']=1;
+		     echo json_encode($data);
+		/// echo json_encode();
+		}
+		else
+		{
+		     $data['request']="Error";
+		     $data['data']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		}
+	  }
+		 catch (Exception $e)
+		  {
+		   $data['request']="Error";
+		     $data['data']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		 }
+	  }
+	  public function editAccount
+	  {
+		try
+		{
+		if($this->input->post('tokenId') && $this->input->post('user_id'))
+			{
+				$res=$this->model_api->editAccount();  
+		        }
+		else
+		    {
+		     $data['request']="Error";
+		     $data['message']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		    }
+		}
+	     catch (Exception $e)
+		  {
+		     $data['request']="Error";
+		     $data['message']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		  }
 	  }
 	
 	  public function  registration()
 	  {
-		  
+		try
+		{
 			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id'))
 			{
 				$res=$this->model_api->registration();
@@ -51,10 +98,20 @@ class Api extends CI_Controller {
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
+		}
+		  catch (Exception $e)
+		  {
+			$data['request']="Error";
+			$data['message']="Check your request";
+			$data['request_id']=0;
+			echo json_encode($data);    
+		  }
 	  }
 	 
 	  public function check_token()
 	  {
+		try
+		{
 		if($this->input->post("email_token") && $this->input->post("mobile_token") && $this->input->post("user_id"))  
 		 {
 			$email_token=$this->model_api->check_email_token(); 
@@ -111,6 +168,14 @@ class Api extends CI_Controller {
 			$data['request_id']=0;
 			echo json_encode($data); 
 		 }
+		}
+		catch (Exception $e)
+		  {
+			$data['request']="Error";
+			$data['message']="Check your request";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		 }
 	  }
 	  
 	  public function check_valid()
@@ -127,6 +192,8 @@ class Api extends CI_Controller {
 	  
 	  public function login()
 	  {
+		  try
+		  {
 		  if($this->input->post('username') && $this->input->post('password'))
 		  {
 			  $valid=$this->model_api->login_check();
@@ -135,6 +202,44 @@ class Api extends CI_Controller {
 		  {
 			$data['request']="Error";
 			$data['message']="Username or password entered wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']="Error";
+			$data['message']="Username or password entered wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function change_password()
+	  {
+	     try{
+              if($this->input->post('user_id') && $this->input->post('usertoken'))
+	      {
+		 $pass=$this->model_api->change_password();   
+		 if($pass)
+		 {
+			$data['request']="success";
+			$data['message']="Password successfully updated";
+			$data['request_id']=1;
+			echo json_encode($data); 
+		 }
+		 else
+		 {
+			$data['request']="Error";
+			$data['message']="Entered data wrong";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		 }
+	      }
+	     }
+            catch (Exception $e)
+		  {
+			$data['request']="Error";
+			$data['message']="Entered data wrong";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
