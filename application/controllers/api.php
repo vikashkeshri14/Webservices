@@ -22,10 +22,35 @@ class Api extends CI_Controller {
 		  
 		 echo json_encode($this->model_test->getService());
 	  }
+	  public function editAccount
+	  {
+		try
+		{
+		if($this->input->post('tokenId') && $this->input->post('user_id'))
+			{
+				$res=$this->model_api->editAccount();  
+		        }
+		else
+		    {
+		     $data['request']="Error";
+		     $data['message']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		    }
+		}
+	     catch (Exception $e)
+		  {
+		     $data['request']="Error";
+		     $data['message']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		  }
+	  }
 	
 	  public function  registration()
 	  {
-		  
+		try
+		{
 			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id'))
 			{
 				$res=$this->model_api->registration();
@@ -51,10 +76,20 @@ class Api extends CI_Controller {
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
+		}
+		  catch (Exception $e)
+		  {
+			$data['request']="Error";
+			$data['message']="Check your request";
+			$data['request_id']=0;
+			echo json_encode($data);    
+		  }
 	  }
 	 
 	  public function check_token()
 	  {
+		try
+		{
 		if($this->input->post("email_token") && $this->input->post("mobile_token") && $this->input->post("user_id"))  
 		 {
 			$email_token=$this->model_api->check_email_token(); 
@@ -111,6 +146,14 @@ class Api extends CI_Controller {
 			$data['request_id']=0;
 			echo json_encode($data); 
 		 }
+		}
+		catch (Exception $e)
+		  {
+			$data['request']="Error";
+			$data['message']="Check your request";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		 }
 	  }
 	  
 	  public function check_valid()
@@ -127,11 +170,21 @@ class Api extends CI_Controller {
 	  
 	  public function login()
 	  {
+		  try
+		  {
 		  if($this->input->post('username') && $this->input->post('password'))
 		  {
 			  $valid=$this->model_api->login_check();
 		  }
 		  else
+		  {
+			$data['request']="Error";
+			$data['message']="Username or password entered wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+		  }
+		  catch (Exception $e)
 		  {
 			$data['request']="Error";
 			$data['message']="Username or password entered wrong";
