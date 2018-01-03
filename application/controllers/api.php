@@ -19,8 +19,30 @@ class Api extends CI_Controller {
 	  
 	  public function getService()
 	  {
-		  
-		 echo json_encode($this->model_test->getService());
+		try
+		{
+		if($this->input->post("usertoken")){ 
+		    $data['request']="Success";
+		     $data['data']=$this->model_test->getService();
+		     $data['request_id']=1;
+		     echo json_encode($data);
+		// echo json_encode();
+		}
+		else
+		{
+		     $data['request']="Error";
+		     $data['data']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		}
+	  }
+		 catch (Exception $e)
+		  {
+		   $data['request']="Error";
+		     $data['data']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		 }
 	  }
 	  public function editAccount
 	  {
