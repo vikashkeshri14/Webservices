@@ -50,8 +50,8 @@ public function updatecountry()//--Update Country Function for updating countrie
 				$id=$this->input->post('hdid');
 				
 				/*--Updating the record to Database..*/
-				$this->db->where('id', $id);
-				$this->db->update('user', $ins); 
+				$this->db->where('country_id', $id);
+				$this->db->update('country', $ins); 
 			}
 			else
 			{
@@ -70,7 +70,65 @@ public function updatecountry()//--Update Country Function for updating countrie
 	}
 }
 
+ public function getcountries()//--Getting complete list of countries available
+	{
+		 try
+		 {
+			$q = $this->db->get('country');
+			$data = $q->result_array();
+		 }
+		 catch(Exception $e)
+		 {
+			 /* Need to add the Logger class */
+			logwrite( 'model_country.php >> getcountries >> '.$e->getMessage());
+		 }
+		 
+	 }
 
+public function getcountriesbyid()//-Get countries by ID
+	{
+		 try
+		 {
+			if($this->input->post('hdid'))
+			{
+				$this->db->where('country_id', $id);
+				$q = $this->db->get('country');
+				$data = $q->result_array();
+			}
+			else
+			{
+				return false;
+			}
+		 }
+		 catch(Exception $e)
+		 {
+			 /* Need to add the Logger class */
+			logwrite( 'model_country.php >> getcountriesbyid >> '.$e->getMessage());
+		 }		 
+	 }
+	 public function deletecountry() //-Deleting the record from the table
+	 {
+		 try
+		 {
+			if($this->input->post('hdid'))
+			{
+				$id=$this->input->post('hdid');
+				/*--Deleting the record from Database..*/
+				$this->db->where('country_id', $id);
+				$del=$this->db->delete('country');   
+				return $del;
+			}
+			else
+			{
+				return false;
+			}
+		 }
+		catch(Exception $y)
+		 {
+			 /* Need to add the Logger class */
+			logwrite( 'model_country.php >> deletecountry >> '.$y->getMessage());
+		 }
+	}
 
 }
 
