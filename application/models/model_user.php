@@ -163,7 +163,6 @@ public function enabledisableuser()//--Enable/Disable users
 				
 		  if($this->input->post('status'))
 			{
-
 				$ins['status']=$this->input->post('status');
 				if($this->input->post('hdid'))
 				{
