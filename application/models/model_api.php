@@ -212,7 +212,7 @@ $upd['status']=2;
 	  $value=$query->result();
 	  return $value;
   }
-  public function send_email_token($val)
+  public function send_mobile_token($val)
   {
 	  $query=$this->db->query("select *from user where phone_no='".$val."'");
 	  $value=$query->result();
