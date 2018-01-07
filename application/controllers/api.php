@@ -257,7 +257,63 @@ class Api extends CI_Controller {
 	  }
 	  public function reset_password()
 	  {
-		   
+		try
+		{
+			if($this->input->post('value'))
+			{
+				if (filter_var($this->input->post('value'), FILTER_VALIDATE_EMAIL)) {
+                                  $valid=$this->model_api->send_token_email($this->input->post('value'));
+				       if($valid)
+				       {
+					    $data['request']=true;
+			                    $data['message']="Entered data wrong";
+			                    $data['request_id']=1;
+					    $data['data']=$valid;
+			                    echo json_encode($data);   
+				       }
+				       else
+				       {
+					    $data['request']=false;
+			                    $data['message']="Entered data wrong";
+			                    $data['request_id']=0;
+			                    echo json_encode($data);     
+				       }
+						
+                                } else {
+                                  $valid=$this->model_api->send_token_phone($this->input->post('value'));
+				      if($valid)
+				       {
+					    $data['request']=true;
+			                    $data['message']="Entered data wrong";
+					    $data['data']=$valid;
+			                    $data['request_id']=1;
+			                    echo json_encode($data);   
+				       }
+				       else
+				       {
+					    $data['request']=false;
+			                    $data['message']="Entered data wrong";
+			                    $data['request_id']=0;
+			                    echo json_encode($data);     
+				       }
+                                }
+
+			}
+			else
+			{
+				$data['request']=false;
+			        $data['message']="Entered data wrong";
+			        $data['request_id']=0;
+			        echo json_encode($data);  
+			}
+		}
+		catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Entered data wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
 	  }
 	  
 	  public function check_password()
