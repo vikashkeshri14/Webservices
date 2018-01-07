@@ -206,5 +206,18 @@ $upd['status']=2;
 			return false;
 		}
   }
+  public function send_email_token($val)
+  {
+	  $query=$this->db->query("select *from user where email_id='".$val."'");
+	  $value=$query->result();
+	  return $value;
+  }
+  public function send_email_token($val)
+  {
+	  $query=$this->db->query("select *from user where phone_no='".$val."'");
+	  $value=$query->result();
+	  return $value;
+  }
+	
   
 }
