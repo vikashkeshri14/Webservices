@@ -1,7 +1,7 @@
 <?php
 
 	include('model_log.php');
-	class Model_user extends CI_Model {
+	class model_country extends CI_Model {
   
 	public function __construct()
 	{
