@@ -64,12 +64,12 @@ class Model_api extends CI_Model {
 	  $this->db->insert('user', $ins); 
 	  $insert_id = $this->db->insert_id();
 	 // $time=rand(1000,9999);
-	  $token_email=$this->token();
-	  $token_email['email_token']=$token_email;
+	  $email_token=$this->token();
+	  $token_email['email_token']=$email_token;
 	  $token_email['user_id']=$insert_id;
 	  $token_email['created']=$created;
       $this->db->insert('email_token', $token_email); 
-	  mail("vkeshri.14@gmail.com","Verification token","Your token id is ".$token_email.", this is valid for 10min");
+	 // mail("vkeshri.14@gmail.com","Verification token","Your token id is ".$email_token.", this is valid for 10min");
 	  $mobile_token=$this->token();
 	  $token_phone['mobile_token']=$mobile_token;
 	  $token_phone['user_id']=$insert_id;
@@ -98,23 +98,46 @@ class Model_api extends CI_Model {
   {
 	  return rand(1000,9999);
   }
-  public function check_email_token()
+  
+public function check_email_token()
   {
 	  if($this->input->post("email_token") && $this->input->post("user_id"))  
 		 {
-			 $query=$this->db->query(" select * from email_token order by email_token_id desc limit 1");
+
+			 $query=$this->db->query(" select * from email_token where email_token='".$this->input->post("email_token")."' and user_id='".$this->input->post("user_id")."' order by email_token_id desc limit 1");
 			 $value=$query->result();
 		 }
+return $value;
   }
   
   public function check_mobile_token()
   {
 	  if($this->input->post("mobile_token") && $this->input->post("user_id"))  
 		 {
-			 $query=$this->db->query(" select * from mobile_token order by token_id desc limit 1");
+			 $query=$this->db->query(" select * from mobile_token where mobile_token='".$this->input->post("mobile_token")."' and user_id='".$this->input->post("user_id")."' order by token_id desc limit 1");
 			 $value=$query->result();
 		 }
+return $value;
   }
+
+public function update_email_token($id)
+  {
+	$upd['status']=2;
+	  $this->db->where('email_token_id', $id); 
+	  $this->db->update('email_token', $upd); 
+  }
+  
+  public function update_mobile_token($id)
+  {
+$upd['status']=2;
+	  $this->db->where('token_id', $id); 
+	  $this->db->update('mobile_token', $upd); 
+	  
+  }
+
+
+
+
   public function login_check()
   {
 	   if($this->input->post('username') && $this->input->post('password'))

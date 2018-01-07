@@ -44,7 +44,7 @@ class Api extends CI_Controller {
 		     echo json_encode($data);
 		 }
 	  }
-	  public function editAccount
+	  public function editAccount()
 	  {
 		try
 		{
@@ -68,24 +68,31 @@ class Api extends CI_Controller {
 		     echo json_encode($data);
 		  }
 	  }
-	
+	 public function  test()
+{
+
+		     $data['request']=false;
+		     $data['message']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+}
 	  public function  registration()
 	  {
 		try
 		{
-			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id'))
+			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no'))
 			{
 				$res=$this->model_api->registration();
 				if($res)
 				{
-					$data['request']="Success";
+					$data['request']=true;
 					$data['message']="Data inserted into the system. Please check the email and phone to verify your identity";
 					$data['request_id']=1;
 					echo json_encode($data);
 				}
 				else
 				{
-					$data['request']="Error";
+					$data['request']=false;
 					$data['message']="Check your request";
 					$data['request_id']=0;
 					echo json_encode($data); 
@@ -93,7 +100,7 @@ class Api extends CI_Controller {
 			}
 		  else
 		  {
-			$data['request']="Error";
+			$data['request']=false;
 			$data['message']="Check your request";
 			$data['request_id']=0;
 			echo json_encode($data);  
@@ -101,7 +108,7 @@ class Api extends CI_Controller {
 		}
 		  catch (Exception $e)
 		  {
-			$data['request']="Error";
+			$data['request']=false;
 			$data['message']="Check your request";
 			$data['request_id']=0;
 			echo json_encode($data);    
@@ -113,11 +120,13 @@ class Api extends CI_Controller {
 		try
 		{
 		if($this->input->post("email_token") && $this->input->post("mobile_token") && $this->input->post("user_id"))  
-		 {
+		 {//echo 'hiss';
 			$email_token=$this->model_api->check_email_token(); 
 			$mobile_token=$this->model_api->check_mobile_token();
+//print_r($email_token);
 			if($email_token && $mobile_token)
 			{
+//echo 'hi';
 				$date=date('Y-m-d h:i:s');
 				$min_email=$email_token[0]->created;
 				$min_phone=$mobile_token[0]->created;
@@ -128,17 +137,17 @@ class Api extends CI_Controller {
 				$registration_date_phone = date_create($date); //Replace static date with your database field
 				$expiration_date_phone = date_create($min_phone); //Replace static date with your database field
 				$phone=date_diff($registration_date_phone,$expiration_date_phone);
-                $phone_min=$phone->format("%i");
-				if($email_min<=10)
+                                $phone_min=$phone->format("%i");
+				if($email_min>=30)
 				{
-				  $data['request']="Error";
+				  $data['request']=false;
 				  $data['message']="Verification code does not match";
 				  $data['request_id']=0;
 				  echo json_encode($data);
 				}
-				elseif($phone_min<=10)
+				elseif($phone_min>=30)
 				{
-				  $data['request']="Error";
+				  $data['request']=false;
 				  $data['message']="Verification code does not match";
 				  $data['request_id']=0;
 				  echo json_encode($data);
@@ -146,7 +155,9 @@ class Api extends CI_Controller {
 				}
 				else
 				{
-				  $data['request']="Success";
+                                  $email_token=$this->model_api->update_email_token($email_token[0]->email_token_id); 
+			          $mobile_token=$this->model_api->update_mobile_token($mobile_token[0]->token_id);
+				  $data['request']=true;
 				  $data['message']="Verification code match";
 				  $data['request_id']=1;
 				  echo json_encode($data);
@@ -154,7 +165,7 @@ class Api extends CI_Controller {
 			}
 			else
 			{
-				$data['request']="Error";
+				$data['request']=false;
 				$data['message']="Verification code does not match";
 				$data['request_id']=0;
 				echo json_encode($data);
@@ -238,7 +249,7 @@ class Api extends CI_Controller {
 	     }
             catch (Exception $e)
 		  {
-			$data['request']="Error";
+			$data['request']=false;
 			$data['message']="Entered data wrong";
 			$data['request_id']=0;
 			echo json_encode($data);  
