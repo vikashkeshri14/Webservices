@@ -255,6 +255,11 @@ class Api extends CI_Controller {
 			echo json_encode($data);  
 		  }
 	  }
+	  public function reset_password()
+	  {
+		   
+	  }
+	  
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');
