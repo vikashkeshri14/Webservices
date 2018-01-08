@@ -10,7 +10,8 @@ class Api extends CI_Controller {
 		 $this->load->model('model_test');
 		 $this->load->model('model_api');
 	  	 $this->load->model('model_auth');
-
+		 echo '<pre>';
+         print_r($this->input->request_headers());exit;
          $verify=$this->model_auth->auth_controller();
 		 if($verify==false)
 		 {
