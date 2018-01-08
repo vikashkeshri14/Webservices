@@ -9,12 +9,18 @@ class Api extends CI_Controller {
 		 $this->load->library('form_validation');	
 		 $this->load->model('model_test');
 		 $this->load->model('model_api');
-			//  $check=$this->check_valid();
-			$check=1;
-			  if($check=='false')
-			  {
-				  echo 'Check your url and api screate code before submiting';
-			  }
+	  	 $this->load->model('model_auth');
+
+         $verify=$this->model_auth->auth_controller();
+		 if($verify==false)
+		 {
+			 $data['request']="Error";
+		     $data['data']="You are looking something wrong";
+		     $data['request_id']=0;
+		     echo json_encode($data); 
+			 exit;
+		 }
+		 
 	  }
 	  
 	  public function getService()
