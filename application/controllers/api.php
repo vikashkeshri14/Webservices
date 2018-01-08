@@ -14,11 +14,7 @@ class Api extends CI_Controller {
          $verify=$this->model_auth->auth_controller();
 		 if($verify==false)
 		 {
-			 $data['request']="Error";
-		     $data['data']="You are looking something wrong";
-		     $data['request_id']=0;
-		     echo json_encode($data); 
-			 exit;
+			 redirect('auth_failed');
 		 }
 		 
 	  }
