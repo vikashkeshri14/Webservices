@@ -4,7 +4,7 @@
 <!-- Mirrored from easy-themes.tk/themes/preview/ace/index.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 03 Jul 2013 07:29:47 GMT -->
 <head>
 		<meta charset="utf-8" />
-		<title>Dashboard - Ace Admin</title>
+		<title><?=$title?></title>
 
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />

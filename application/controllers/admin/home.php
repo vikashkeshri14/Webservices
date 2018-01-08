@@ -20,7 +20,7 @@ class Home extends CI_Controller {
 	  
 	  public function index()
 	  {
-		 $data["data"]="home";
+		 $data["title"]="home";
 		 $this->load->view('admin/common/header',$data);
 		 $this->load->view('admin/common/left_menu');
 		 $this->load->view('admin/dashboard');
