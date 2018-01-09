@@ -77,6 +77,7 @@
 												<h4 class="header blue lighter bigger">
 													<i class="icon-coffee green"></i>
 													Please Enter Your Information
+                                                    <?php //if(! is_null($msg)) echo $msg;?>  
 												</h4>
 
 												<div class="space-6"></div>
