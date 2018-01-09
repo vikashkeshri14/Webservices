@@ -348,7 +348,87 @@ class Api extends CI_Controller {
 			echo json_encode($data);  
 		  }
 	  }
-	  
+	  public function check_user()
+	  {
+		  if($this->input->post('username')){
+		   $check=$this->model_object->getAllFromWhereParticular('user',"username='".$this->input->post('username')."'","user_id");
+		   if($check)
+		   {
+			$data['request']=false;
+			$data['message']="User Exist";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		   }
+		   else
+		   {
+			$data['request']=true;
+			$data['message']="User not Exist";
+			$data['request_id']=1;
+			echo json_encode($data); 
+		   }
+		  }
+		  else
+		  {
+			$data['request']=false;
+			$data['message']="User Exist";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		  }
+	  }
+	  public function check_mobile()
+	  {
+		  if($this->input->post('mobile')){
+		   $check=$this->model_object->getAllFromWhereParticular('user',"phone_no ='".$this->input->post('mobile')."'","user_id");
+		   if($check)
+		   {
+			$data['request']=false;
+			$data['message']="Phone number Exist";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		   }
+		   else
+		   {
+			$data['request']=true;
+			$data['message']="Phone number not Exist";
+			$data['request_id']=1;
+			echo json_encode($data); 
+		   }
+		  }
+		  else
+		  {
+			$data['request']=false;
+			$data['message']="Phone number Exist";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		  }
+	  }
+	  public function check_email()
+	  {
+		  if($this->input->post('email')){
+		   $check=$this->model_object->getAllFromWhereParticular('user',"email_id='".$this->input->post('email')."'","user_id");
+		   if($check)
+		   {
+			$data['request']=false;
+			$data['message']="Email Exist";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		   }
+		   else
+		   {
+			$data['request']=true;
+			$data['message']="Email not Exist";
+			$data['request_id']=1;
+			echo json_encode($data); 
+		   }
+		  }
+		  else
+		  {
+			$data['request']=false;
+			$data['message']="Email Exist";
+			$data['request_id']=0;
+			echo json_encode($data); 
+		  }
+	  }
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');
