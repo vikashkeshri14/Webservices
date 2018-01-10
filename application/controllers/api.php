@@ -433,7 +433,12 @@ class Api extends CI_Controller {
 	  {
 		  try
 		  {
-		  $city=$this->model_object->getAllOrder('city','city_id');
+		    $city=$this->model_object->getAllOrder('city','city_id');
+			$data['request']=false;
+			$data['message']="Entered data wrong";
+			$data['request_id']=0;
+			$data['city']= $city;
+			echo json_encode($data);  
 		  }
 		  catch (Exception $e)
 		  {
