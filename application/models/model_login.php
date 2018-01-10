@@ -13,7 +13,32 @@
 
 
 	 public function validate(){
-        // grab user input
+        if($this->input->post('username') && $this->input->post('password'))
+	{
+		$username = trim($this->input->post('username'));
+                $password = trim($this->input->post('password'));
+		$query=$this->db->query("select *from user where username='".$username."' and password='".$password."'");
+		$result=$query->result();
+		if($result)
+		{
+		   $data = array(
+                    'username' => $result[0]->username,
+                    'validated' => true
+                    );
+                   $this->session->set_userdata($data);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+        else
+	{
+		return false;
+	}
+	 }
+      /*  // grab user input
         $username = trim($this->input->post('username'));
         $password = trim($this->input->post('password'));
         
@@ -38,7 +63,7 @@
         // If the previous process did not validate
         // then return false.
         return false;
-    }
+    }*/
 }
 
 ?>
