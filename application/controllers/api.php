@@ -429,6 +429,20 @@ class Api extends CI_Controller {
 			echo json_encode($data); 
 		  }
 	  }
+	  public function getsuggessation()
+	  {
+		  try
+		  {
+		  $city=$this->model_object->getAllOrder('city','city_id');
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Entered data wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');
