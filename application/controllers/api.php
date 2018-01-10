@@ -433,12 +433,22 @@ class Api extends CI_Controller {
 	  {
 		  try
 		  {
-		    $city=$this->model_object->getAllOrder('city','city_id');
-			$data['request']=false;
+			  if($this->input->post('suggestion'))
+			  {
+		    $city=$this->model_object->get_wildcard('city','city_id,city_name',"city_name like '%".$this->input->post('suggestion')."%'");
+			$data['request']=true;
 			$data['message']="Entered data wrong";
-			$data['request_id']=0;
+			$data['request_id']=1;
 			$data['city']= $city;
 			echo json_encode($data);  
+			  }
+			 else
+			 {
+				$data['request']=false;
+			$data['message']="Entered data wrong";
+			$data['request_id']=0;
+			echo json_encode($data); 
+			 }
 		  }
 		  catch (Exception $e)
 		  {
