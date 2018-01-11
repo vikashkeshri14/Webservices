@@ -113,6 +113,39 @@ public function getservicerequestbyid()//-Get servicetypes by ID
 			logwrite( 'Model_servicerequest.php >> deleteservicerequest >> '.$y->getMessage());
 		 }
 	}
+	
+	
+public function enabledisableservicerequest()//--Enable/Disable servicerequest
+   {
+	    try 
+		{	
+				
+		  if($this->input->post('status'))
+			{
+				$ins['status']=$this->input->post('status');
+				if($this->input->post('hdid'))
+				{
+					$id=$this->input->post('hdid');
+				/*--Updating the record to Database..*/
+				$this->db->where('service_request_id', $id);
+				$this->db->update('service_request', $ins); 
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			  {
+				  return false;
+			  }		
+		}	  
+	  catch(Exception $e)//catch exception
+		  {
+			  /* Need to add the Logger class */
+			logwrite( 'Model_servicerequest.php >> enabledisableservicerequest >> '.$e->getMessage());
+		  }
+   } 
 
 }
 
