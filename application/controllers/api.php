@@ -323,11 +323,11 @@ class Api extends CI_Controller {
 		 try{
          if($this->input->post('user_id') && $this->input->post('usertoken'))
 	      {
-		 $pass=$this->model_api->change_password();   
-		 if($pass)
+		 $services=$this->model_api->add_services();   
+		 if($services)
 		 {
 			$data['request']="success";
-			$data['message']="Password successfully updated";
+			$data['message']="Services successfully added";
 			$data['request_id']=1;
 			echo json_encode($data); 
 		 }
