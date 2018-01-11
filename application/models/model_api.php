@@ -224,7 +224,7 @@ $upd['status']=2;
    if($this->input->post('tokenId') && $this->input->post('user_id'))
 	{
 	  $password=$this->password_encrypt($this->input->post('password'));
-	  $upd['email_id']=$this->input->post('email_id');
+	  $upd['tittle']=$this->input->post('email_id');
 	  $upd['phone_no']=$this->input->post('phone_no');
 	  $upd['password']=$password;
 	  
