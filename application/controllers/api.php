@@ -320,8 +320,8 @@ class Api extends CI_Controller {
 	  }
 	  public function add_services()
 	  {
-		   try{
-              if($this->input->post('user_id') && $this->input->post('usertoken'))
+		 try{
+         if($this->input->post('user_id') && $this->input->post('usertoken'))
 	      {
 		 $pass=$this->model_api->change_password();   
 		 if($pass)
