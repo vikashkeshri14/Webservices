@@ -223,21 +223,55 @@ $upd['status']=2;
   {
    if($this->input->post('tokenId') && $this->input->post('user_id'))
 	{
-	  $password=$this->password_encrypt($this->input->post('password'));
-	  $upd['tittle']=$this->input->post('email_id');
-	  $upd['phone_no']=$this->input->post('phone_no');
-	  $upd['password']=$password;
+	  //$password=$this->password_encrypt($this->input->post('password'));
+	  $ins['tittle']=$this->input->post('tittle');
+	  if($this->input->post('expiry_date'))
+	  $ins['expiry_date']=$this->input->post('expiry_date');
+	  if($this->input->post('delivery'))
+	  $ins['delivery']=$this->input->post('delivery');
+	  if($this->input->post('description'))
+	  $ins['description']=$this->input->post('description');
+	  if($this->input->post('skill'))
+	  $ins['skill']=$this->input->post('skill');
+	  if($this->input->post('category'))
+	  $ins['service_types']=$this->input->post('category');
+	  if($this->input->post('attachment'))
+	  $ins['attachment']=$this->input->post('attachment');
+	  $ins['user_id']=$this->input->post('user_id');
 	  
-	  if($this->input->post('iqama_id'))
-	  $upd['iqama_id']=$this->input->post('iqama_id');
-	  if($this->input->post('mobile_token'))
-	  $upd['comercial_registration']=$this->input->post('comercial_registration');
-	  if($this->input->post('city'))
-	  $upd['city']=$this->input->post('city');
-	  if($this->input->post('country'))
-	  $upd['city']=$this->input->post('country');
-	  $this->db->where('user_id', $this->input->post('user_id')); 
-	  $this->db->update('user', $upd); 
+	  $this->db->insert('service_request', $ins); 
+	  
+	  return true;
+	  //sms code is here
+	}
+	else
+	{
+		return false;
+	}
+	
+  }
+  public function upd_services()	
+  {
+   if($this->input->post('tokenId') && $this->input->post('user_id'))
+	{
+	  //$password=$this->password_encrypt($this->input->post('password'));
+	  $upd['tittle']=$this->input->post('tittle');
+	  if($this->input->post('expiry_date'))
+	  $upd['expiry_date']=$this->input->post('expiry_date');
+	  if($this->input->post('delivery'))
+	  $upd['delivery']=$this->input->post('delivery');
+	  if($this->input->post('description'))
+	  $upd['description']=$this->input->post('description');
+	  if($this->input->post('skill'))
+	  $upd['skill']=$this->input->post('skill');
+	  if($this->input->post('category'))
+	  $upd['service_types']=$this->input->post('category');
+	  if($this->input->post('attachment'))
+	  $upd['attachment']=$this->input->post('attachment');
+	 
+	  $this->db->where('service_request_id',$this->input->post('service_request_id'));
+	  
+	  $this->db->update('service_request', $upd); 
 	  
 	  return true;
 	  //sms code is here
