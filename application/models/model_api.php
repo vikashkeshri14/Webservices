@@ -9,7 +9,12 @@ class Model_api extends CI_Model {
   }
   public function getService()
   {
-	$query=$this->db->query("select *from service_request");
+	$query=$this->db->query("select *from service_request where status=1");
+	return $query->result();
+  }
+  public function getMyService()
+  {
+	$query=$this->db->query("select *from service_request where status=1 and user_id=".$this->input->post('user_id'));
 	return $query->result();
   }
   public function editAccount()	
