@@ -283,4 +283,25 @@ $upd['status']=2;
 	
   }
   
+  public function extend_services()	
+  {
+   if($this->input->post('tokenId') && $this->input->post('user_id'))
+	{
+	  
+	  $upd['expiry_date']=$this->input->post('expiry_date');
+	 
+	  $this->db->where('service_request_id',$this->input->post('service_request_id'));
+	  
+	  $this->db->update('service_request', $upd); 
+	  
+	  return true;
+	  //sms code is here
+	}
+	else
+	{
+		return false;
+	}
+	
+  }
+  
 }
