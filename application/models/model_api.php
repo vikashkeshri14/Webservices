@@ -267,6 +267,22 @@ public function update_email_token($id)
 	  $this->db->where('bid_id',$this->input->post('bid_id'));	
 	  $this->db->update('place_bids',$ins); 
   }
+  public function addWatchList()
+  {
+	  if($this->input->post('user_id') && $this->input->post('service_id') && $this->input->post('token'))
+	  {
+		  $created=date('Y-m-d h:i:s');
+		  $ins['user_id']=$this->input->post('user_id');
+		  $ins['service_id']=$this->input->post('service_id');
+		  $ins['created']=$created;
+		  $this->db->insert('watchlist', $ins);  
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
   public function placeBid()
   {
 	   if($this->input->post('service_id') && $this->input->post('user_id')  && $this->input->post('bibAmount') && $this->input->post('delivery'))

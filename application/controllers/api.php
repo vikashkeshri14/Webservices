@@ -752,7 +752,21 @@ class Api extends CI_Controller {
 		  {
 			  if($this->input->post('user_id') && $this->input->post('service_id') && $this->input->post('token'))
 			  {
-				  
+				  $check=$this->model_api->addWatchList();
+				  if($check)
+				  {
+					  $data['request']=true;
+		              $data['message']="Added Successfully";
+			          $data['request_id']=0;
+			          echo json_encode($data);  
+				  }
+				  else
+				  {
+					  $data['request']=false;
+		              $data['message']="Something Wrong";
+			          $data['request_id']=0;
+			          echo json_encode($data);  
+				  }
 			  }
 			  else
 			  {
