@@ -75,8 +75,10 @@ public function updatecity()//--Update city Function for updating cities
 	{
 		 try
 		 {
+			$this->db->join('country', 'city.country_id = country.country_id');
 			$q = $this->db->get('city');
 			$data = $q->result_array();
+			return $data;
 		 }
 		 catch(Exception $e)
 		 {

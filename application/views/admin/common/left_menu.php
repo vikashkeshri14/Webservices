@@ -37,164 +37,223 @@
 						</a>
 					</li>
 
-					<li>
+					<!--<li>
 						<a href="typography.html">
 							<i class="icon-text-width"></i>
 							<span>Typography</span>
+						</a>
+					</li>-->
+
+					<li>
+						<a href="#" class="dropdown-toggle">
+							<i class="icon-desktop"></i>
+							<span>Manage Request</span>
 						</a>
 					</li>
 
 					<li>
 						<a href="#" class="dropdown-toggle">
 							<i class="icon-desktop"></i>
-							<span>UI Elements</span>
+							<span>Manage BID</span>							
+						</a>
+					</li>
+                    
+                    <li>
+						<a href="#" class="dropdown-toggle">
+							<i class="icon-comment"></i>
+							<span>Manage Comments</span>							
+						</a>
+					</li>
+                    <li>
+						<a href="#" class="dropdown-toggle">
+							<i class="icon-user"></i>
+							<span>Manage Users</span>
 
 							<b class="arrow icon-angle-down"></b>
 						</a>
 
 						<ul class="submenu">
+                        <li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									Add User
+								</a>
+							</li>
 							<li>
 								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Elements
-								</a>
-							</li>
-
-							<li>
-								<a href="buttons.html">
-									<i class="icon-double-angle-right"></i>
-									Buttons &amp; Icons
-								</a>
-							</li>
-
-							<li>
-								<a href="treeview.html">
-									<i class="icon-double-angle-right"></i>
-									Treeview
+									View User
 								</a>
 							</li>
 						</ul>
 					</li>
+                     <li>
+						<a href="#" class="dropdown-toggle">
+							<i class="icon-desktop"></i>
+							<span>Manage Service Type</span>
 
-					<li>
-						<a href="tables.html">
+							<b class="arrow icon-angle-down"></b>
+						</a>
+
+						<ul class="submenu">
+                        <li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									Add Service Type
+								</a>
+							</li>
+							<li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									View Service Type
+								</a>
+							</li>
+						</ul>
+					</li>
+                    <li>
+						<a href="#" class="dropdown-toggle">
+							<i class="icon-globe"></i>
+							<span>Manage Country</span>
+
+							<b class="arrow icon-angle-down"></b>
+						</a>
+
+						<ul class="submenu">
+                        <li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									Add Country
+								</a>
+							</li>
+							<li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									View Country
+								</a>
+							</li>
+						</ul>
+					</li>
+                     <li>
+						<a href="#" class="dropdown-toggle">
+							<i class="icon-globe"></i>
+							<span>Manage City</span>
+
+							<b class="arrow icon-angle-down"></b>
+						</a>
+
+						<ul class="submenu">
+                        <li>
+								<a href="addcity">
+									<i class="icon-double-angle-right"></i>
+									Add City
+								</a>
+							</li>
+							<li>
+								<a href="viewcity">
+									<i class="icon-double-angle-right"></i>
+									View City
+								</a>
+							</li>
+						</ul>
+					</li>
+                     <li>
+						<a href="#" class="dropdown-toggle">
 							<i class="icon-list"></i>
-							<span>Tables</span>
-						</a>
-					</li>
-
-					<li>
-						<a href="#" class="dropdown-toggle">
-							<i class="icon-edit"></i>
-							<span>Forms</span>
+							<span>Manage CMS</span>
 
 							<b class="arrow icon-angle-down"></b>
 						</a>
 
 						<ul class="submenu">
-							<li>
-								<a href="form-elements.html">
+                        <li>
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Form Elements
+									Add CMS
 								</a>
 							</li>
-
 							<li>
-								<a href="form-wizard.html">
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Wizard &amp; Validation
-								</a>
-							</li>
-
-							<li>
-								<a href="wysiwyg.html">
-									<i class="icon-double-angle-right"></i>
-									Wysiwyg &amp; Markdown
+									View CMS
 								</a>
 							</li>
 						</ul>
 					</li>
-
-					<li>
-						<a href="widgets.html">
-							<i class="icon-list-alt"></i>
-							<span>Widgets</span>
-						</a>
-					</li>
-
-					<li>
-						<a href="calendar.html">
-							<i class="icon-calendar"></i>
-							<span>Calendar</span>
-						</a>
-					</li>
-
-					<li>
-						<a href="gallery.html">
-							<i class="icon-picture"></i>
-							<span>Gallery</span>
-						</a>
-					</li>
-
-					<li>
-						<a href="grid.html">
-							<i class="icon-th"></i>
-							<span>Grid</span>
-						</a>
-					</li>
-
-					<li>
+                    
+                    <li>
 						<a href="#" class="dropdown-toggle">
-							<i class="icon-file"></i>
-							<span>Other Pages</span>
+							<i class="icon-list"></i>
+							<span>Reports</span>
 
 							<b class="arrow icon-angle-down"></b>
 						</a>
 
 						<ul class="submenu">
-							<li>
-								<a href="pricing.html">
+                        <li>
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Pricing Tables
+									View Transaction
 								</a>
 							</li>
-
 							<li>
-								<a href="invoice.html">
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Invoice
+									View Rating
 								</a>
 							</li>
-
-							<li>
-								<a href="login.html">
+                            <li>
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Login &amp; Register
+									Total Service requested
 								</a>
 							</li>
-
-							<li>
-								<a href="error-404.html">
+                            <li>
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Error 404
+									Total Service request status
 								</a>
 							</li>
-
-							<li>
-								<a href="error-500.html">
+                            <li>
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Error 500
+									Total Placed Bid’s Report
 								</a>
 							</li>
-
-							<li>
-								<a href="blank.html">
+                            <li>
+								<a href="elements.html">
 									<i class="icon-double-angle-right"></i>
-									Blank Page
+									Total Bid’s Accepted Report
 								</a>
 							</li>
+                            <li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									View SMS Report
+								</a>
+							</li>
+                            <li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									Email report
+								</a>
+							</li>
+                            <li>
+								<a href="elements.html">
+									<i class="icon-double-angle-right"></i>
+									View all push notification
+								</a>
+							</li>
+                            
 						</ul>
 					</li>
+                    
+                     <li>
+						<a href="#" class="dropdown-toggle">
+							<i class="icon-comment"></i>
+							<span>Send Push Notification</span>							
+						</a>
+					</li>
+      
 				</ul><!--/.nav-list-->
 
 				<div id="sidebar-collapse">

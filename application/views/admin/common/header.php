@@ -45,7 +45,7 @@
 					<a href="#" class="brand">
 						<small>
 							<i class="icon-leaf"></i>
-							Ace Admin
+							Alpha Admin Panel
 						</small>
 					</a><!--/.brand-->
 
