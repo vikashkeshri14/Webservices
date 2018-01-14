@@ -10,14 +10,12 @@ class Api extends CI_Controller {
 		 $this->load->model('model_test');
 		 $this->load->model('model_api');
 	  	 $this->load->model('model_auth');
-		 echo '<pre>';
-         print_r($this->input->request_headers());exit;
-         $verify=$this->model_auth->auth_controller();
-		 if($verify==false)
+        /* $verify=$this->model_auth->auth_controller();
+		 if($verify==true)
 		 {
 			 redirect('auth_failed');
 		 }
-		 
+		 */
 	  }
 	  
 	  public function getService()
@@ -47,7 +45,42 @@ class Api extends CI_Controller {
 		     echo json_encode($data);
 		 }
 	  }
-	  
+	  public function send_notification()
+	  {
+		  //$user=$this->model_object->getAllByStatus('user');
+				 
+		// API access key from Google API's Console
+		define( 'API_ACCESS_KEY', 'AIzaSyBRT7diAx_ip6dXhcS8DPlBg7Bwg0GuLhU' );
+		$registrationIds = array( 'dzeNRo1iuPc:APA91bGmf4whmHKyDSmwgIDVFwr_Ga7TXzu881SOTJj_jmlRvy08A8tREmDXZviHqStE8F1Aa8fWkvS42LJOQjeIIacIi2iuNyYmTXU9nJaGqy-gC7pEQDu1MXPJPb9xV9AvaRVYxikQ' );
+		// prep the bundle
+		$msg = array
+		(
+			'message' 	=> 'here is a message. message',
+			
+		);
+		$fields = array
+		(
+			'registration_ids' 	=> $registrationIds,
+			'data'			=> $msg
+		);
+		 
+		$headers = array
+		(
+			'Authorization: key=' . API_ACCESS_KEY,
+			'Content-Type: application/json'
+		);
+		 
+		$ch = curl_init();
+		curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+		curl_setopt( $ch,CURLOPT_POST, true );
+		curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+		curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+		curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+		$result = curl_exec($ch );
+		curl_close( $ch );
+		echo $result;
+	  }
 	  public function getMyService()
 	  {
 		try
@@ -488,6 +521,256 @@ class Api extends CI_Controller {
 			echo json_encode($data);  
 		  }
 	  }
+	  
+	  public function cancel_service_token()
+	  {
+		  try
+		  {
+			  if($this->input->post('service_id') && $this->input->post('user_id'))
+			  {
+				  $check_valid=$this->model_object->getAllFromWhereParticular('service_request',"user_id=".$this->input->post('user_id')." and service_request_id=".$this->input->post('service_id')." and status=1","service_request_id");
+				  if(count($check_valid)>0)
+				  {
+					  $token=$this->model_api->send_cancel_token();
+					  $data['request']=true;
+					  $data['message']="Token send Successfully";
+					  $data['request_id']=0;
+					  echo json_encode($data);
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);  
+				  }
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function check_service_token()
+	  {
+		  try
+		  {
+			  if($this->input->post('service_id') && $this->input->post('user_id')  && $this->input->post('tokenId'))
+			  {
+				$check_valid=$this->model_object->getAllFromWhereParticular('cancel_service_token',"service_id=".$this->input->post('service_id')." and token=".$this->input->post('token'),"service_id");  
+				if(count($check_valid)>0)
+				{
+					  $this->model_api->disable_service();
+					  $data['request']=true;
+					  $data['message']="Service Successfully Cancel";
+					  $data['request_id']=1;
+					  echo json_encode($data);  
+				}
+				else
+				{
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);  
+				}
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function placeBid()
+	  {
+		  try
+		  {
+			  if($this->input->post('service_id') && $this->input->post('user_id')  && $this->input->post('bibAmount') && $this->input->post('delivery'))
+			  {
+				  $placed=$this->model_api->placeBid();
+				  if($placed)
+				  {
+					  $data['request']=true;
+					  $data['message']="Bid Added Successfully";
+					  $data['request_id']=1;
+					  echo json_encode($data);
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);  
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function updateBid()
+	  {
+		 try
+		  {
+		 if($this->input->post('service_id') && $this->input->post('user_id')  && $this->input->post('bibAmount') && $this->input->post('delivery') && $this->input->post('bid_id'))
+			  {
+				  $placed=$this->model_api->updateBid();
+				  if($placed)
+				  {
+					  $data['request']=true;
+					  $data['message']="Bid Added Successfully";
+					  $data['request_id']=1;
+					  echo json_encode($data);
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);  
+				  }
+			  }
+			else
+			{
+				$data['request']=false;
+				$data['message']="Invalid Request";
+				$data['request_id']=0;
+				echo json_encode($data);  
+			}
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  
+	  public function withdrawBid()
+	  {
+		  try
+		  {
+			  if($this->input->post('bid_id') && $this->input->post('user_id') && $this->input->post('service_id'))
+			  {
+				$check_valid=$this->model_object->getAllFromWhereParticular('place_bids',"service_id=".$this->input->post('service_id')." and user_id=".$this->input->post('user_id')." and bid_id =".$this->input->post('bid_id'),"service_id");  
+				if(count($check_valid)>0)
+				{
+					$check=$this->model_api->withdrawBidToken()
+					if($check)
+					{
+						$data['request']=true;
+				        $data['message']="Invalid Request";
+				        $data['request_id']=0;
+				        echo json_encode($data);
+					}
+					else
+					{
+						$data['request']=true;
+				        $data['message']="Invalid Request";
+				        $data['request_id']=0;
+				        echo json_encode($data);
+					}
+				}
+				else
+				{
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+				}
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  
+	  public function disable_bid()
+	  {
+		  try
+		  {
+			  if($this->input->post('service_id') && $this->input->post('user_id')   && $this->input->post('bid_id') && $this->input->post('token'))
+			  {
+				$check_valid=$this->model_object->getAllFromWhereParticular('place_bids',"bid_id=".$this->input->post('bid_id')." and token=".$this->input->post('token'),"service_id");  
+				if(count($check_valid)>0)
+				{
+					  $this->model_api->disable_bid();
+					  $data['request']=true;
+					  $data['message']="Bid Successfully Withdraw";
+					  $data['request_id']=1;
+					  echo json_encode($data);  
+				}
+				else
+				{
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);  
+				}
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  } 
+	  }
+	  
+	  public function addWatchList()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_id') && $this->input->post('service_id') && $this->input->post('token'))
+			  {
+				  
+			  }
+			  else
+			  {
+				  $data['request']=false;
+		          $data['message']="Something Wrong";
+			      $data['request_id']=0;
+			      echo json_encode($data);  
+				  
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');
@@ -501,9 +784,6 @@ class Api extends CI_Controller {
 		  echo $this->model_api->token();
 		  echo '<br>';
 		  echo $this->model_api->token();
-	  }
-	  
-		
-		
+	  }		
 		
 }

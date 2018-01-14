@@ -57,11 +57,11 @@ class Model_api extends CI_Model {
 	  $ins['phone_no']=$this->input->post('phone_no');
 	  $ins['role_id']=$this->input->post('role_id');
 	  $ins['password']=$password;
-	  if($this->input->post('mobile_token'))
-	  $ins['mobile_token']=$this->input->post('mobile_token');
-	  if($this->input->post('mobile_token'))
+	  if($this->input->post('user_token'))
+	  $ins['user_token']=$this->input->post('user_token');
+	  if($this->input->post('iqama_id'))
 	  $ins['iqama_id']=$this->input->post('iqama_id');
-	  if($this->input->post('mobile_token'))
+	  if($this->input->post('comercial_registration'))
 	  $ins['comercial_registration']=$this->input->post('comercial_registration');
 	  if($this->input->post('city'))
 	  $ins['city']=$this->input->post('city');
@@ -127,14 +127,14 @@ return $value;
 
 public function update_email_token($id)
   {
-	$upd['status']=2;
+	  $upd['status']=2;
 	  $this->db->where('email_token_id', $id); 
 	  $this->db->update('email_token', $upd); 
   }
   
   public function update_mobile_token($id)
   {
-$upd['status']=2;
+      $upd['status']=2;
 	  $this->db->where('token_id', $id); 
 	  $this->db->update('mobile_token', $upd); 
 	  
@@ -223,7 +223,92 @@ $upd['status']=2;
 	  $value=$query->result();
 	  return $value;
   }
-   
+  public function send_cancel_token()
+  {
+	  $cancel_token=$this->token();
+	  $created=date('Y-m-d h:i:s');
+	  $ins['service_id']=$this->input->post('service_id');
+	  $ins['token']=$cancel_token;
+	  $ins['created']=$created;
+	  $this->db->insert('cancel_service_token', $ins); 
+	  //sms code goes here
+	  
+	  
+	  return $value;
+  }
+  public function withdrawBidToken()
+  {
+	  if($this->input->post('bid_id')){
+      $cancel_token=$this->token();
+	  $ins['token']=$cancel_token;
+	  $this->db->where('bid_id',$this->input->post('bid_id'));	
+	  $this->db->update('place_bids',$ins);   
+	  
+	  //sms to phone here
+	  
+	  return true;
+	  }
+	  else
+	  {
+		  return false
+	  }
+  }
+  public function disable_service()
+  {
+
+	  $ins['status']=2;
+	  $this->db->where('service_request_id',$this->input->post('service_id'));	
+	  $this->db->update('service_request',$ins); 
+  }
+  
+  public function disable_bid()
+  {
+	  $ins['status']=0;
+	  $this->db->where('bid_id',$this->input->post('bid_id'));	
+	  $this->db->update('place_bids',$ins); 
+  }
+  public function placeBid()
+  {
+	   if($this->input->post('service_id') && $this->input->post('user_id')  && $this->input->post('bibAmount') && $this->input->post('delivery'))
+	   {
+		    $created=date('Y-m-d h:i:s');
+		    $ins['service_id']=$this->input->post('service_id');
+			$ins['user_id']=$this->input->post('user_id');
+			$ins['bid_amount ']=$this->input->post('bibAmount');
+			$ins['delivery']=$this->input->post('delivery');
+			if($this->input->post('qualification'))
+			$ins['qualification']=$this->input->post('qualification');
+			if($this->input->post('description'))
+			$ins['description']=$this->input->post('description');
+			$ins['created']=$created;
+	        $this->db->insert('place_bids', $ins);  
+		   return true;
+	   }
+	   else
+	   {
+		   return false;
+	   }
+  }
+  
+  public function updateBid()
+  {
+	   if($this->input->post('service_id') && $this->input->post('user_id')  && $this->input->post('bibAmount') && $this->input->post('delivery') && $this->input->post('bid_id'))
+	   {
+			$upd['bid_amount ']=$this->input->post('bibAmount');
+			$upd['delivery']=$this->input->post('delivery');
+			if($this->input->post('qualification'))
+			$upd['qualification']=$this->input->post('qualification');
+			if($this->input->post('description'))
+			$upd['description']=$this->input->post('description');
+		    $this->db->where('bid_id',$this->input->post('bid_id'));
+	        $this->db->update('place_bids', $upd); 
+		    return true;
+	   }
+	   else
+	   {
+		   return false;
+	   }
+  }
   public function add_services()	
   {
    if($this->input->post('tokenId') && $this->input->post('user_id'))
