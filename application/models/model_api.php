@@ -250,7 +250,7 @@ public function update_email_token($id)
 	  }
 	  else
 	  {
-		  return false
+		  return false;
 	  }
   }
   public function disable_service()

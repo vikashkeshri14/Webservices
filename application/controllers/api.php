@@ -51,7 +51,7 @@ class Api extends CI_Controller {
 				 
 		// API access key from Google API's Console
 		define( 'API_ACCESS_KEY', 'AIzaSyBRT7diAx_ip6dXhcS8DPlBg7Bwg0GuLhU' );
-		$registrationIds = array( 'dzeNRo1iuPc:APA91bGmf4whmHKyDSmwgIDVFwr_Ga7TXzu881SOTJj_jmlRvy08A8tREmDXZviHqStE8F1Aa8fWkvS42LJOQjeIIacIi2iuNyYmTXU9nJaGqy-gC7pEQDu1MXPJPb9xV9AvaRVYxikQ' );
+		$registrationIds = array( 'ea65Telb7dk:APA91bGD4UpSZpnHBL19QoAr_3wW1iJ-ZEeBq_lYC8TfAXzeFE0mg1z61o6wRNT7MpGwCMKydIozJbR9ekxi0m0MSJ4Th5dvmGWmft6cTBHa1MRinsvLd6iZXhRUTQ-kvBEBpb6FP7Xe' );
 		// prep the bundle
 		$msg = array
 		(
@@ -672,7 +672,7 @@ class Api extends CI_Controller {
 				$check_valid=$this->model_object->getAllFromWhereParticular('place_bids',"service_id=".$this->input->post('service_id')." and user_id=".$this->input->post('user_id')." and bid_id =".$this->input->post('bid_id'),"service_id");  
 				if(count($check_valid)>0)
 				{
-					$check=$this->model_api->withdrawBidToken()
+					$check=$this->model_api->withdrawBidToken();
 					if($check)
 					{
 						$data['request']=true;
