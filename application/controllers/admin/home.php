@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+//defined('BASEPATH') OR exit('No direct script access allowed');
 class Home extends CI_Controller {
 
 	  public function __construct()
@@ -10,7 +10,7 @@ class Home extends CI_Controller {
 		 $this->load->library('form_validation');	
 		 $this->load->model('model_test');
 		 $this->load->model('model_api');
-		 $this->check_isvalidated();
+		// $this->check_isvalidated();
 			//  $check=$this->check_valid();
 			$check=1;
 			  if($check=='false')
