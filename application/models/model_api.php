@@ -236,6 +236,25 @@ public function update_email_token($id)
 	  
 	  return $value;
   }
+  public function viewMyBids()
+  {
+	  $query=$this->db->query("select s.title as service_title,p.description as desc,p.bid_amount as amount,p.bid_id as bid_id,p.created as bidDate from service_request as s, place_bids as p where s.service_request_id=p.service_id order by p.created desc");
+	  
+	  return $query->result_array();
+  }
+  
+  public function viewMyWatchList()
+  {
+	  if($this->input->post('user_id'))
+	   {
+	   $query=$this->db->query("select w.watchlist_id as watchlist_id,s.title as service_title,s.expiry_date as expiry_date,s.delivery as delivery from service_request as s, watchlist as w where s.service_request_id=w.service_id and w.user_id='".$this->input->post('user_id')."' order by w.created desc");
+	   return $query->result_array();
+	   }
+	   else
+	   {
+		   return false;
+	   }
+  }
   public function withdrawBidToken()
   {
 	  if($this->input->post('bid_id')){
@@ -266,6 +285,22 @@ public function update_email_token($id)
 	  $ins['status']=0;
 	  $this->db->where('bid_id',$this->input->post('bid_id'));	
 	  $this->db->update('place_bids',$ins); 
+  }
+  public function addWatchList()
+  {
+	  if($this->input->post('user_id') && $this->input->post('service_id') && $this->input->post('token'))
+	  {
+		  $created=date('Y-m-d h:i:s');
+		  $ins['user_id']=$this->input->post('user_id');
+		  $ins['service_id']=$this->input->post('service_id');
+		  $ins['created']=$created;
+		  $this->db->insert('watchlist', $ins);  
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
   }
   public function placeBid()
   {

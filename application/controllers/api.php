@@ -51,7 +51,7 @@ class Api extends CI_Controller {
 				 
 		// API access key from Google API's Console
 		define( 'API_ACCESS_KEY', 'AIzaSyBRT7diAx_ip6dXhcS8DPlBg7Bwg0GuLhU' );
-		$registrationIds = array( 'dzeNRo1iuPc:APA91bGmf4whmHKyDSmwgIDVFwr_Ga7TXzu881SOTJj_jmlRvy08A8tREmDXZviHqStE8F1Aa8fWkvS42LJOQjeIIacIi2iuNyYmTXU9nJaGqy-gC7pEQDu1MXPJPb9xV9AvaRVYxikQ' );
+		$registrationIds = array( 'ea65Telb7dk:APA91bGD4UpSZpnHBL19QoAr_3wW1iJ-ZEeBq_lYC8TfAXzeFE0mg1z61o6wRNT7MpGwCMKydIozJbR9ekxi0m0MSJ4Th5dvmGWmft6cTBHa1MRinsvLd6iZXhRUTQ-kvBEBpb6FP7Xe' );
 		// prep the bundle
 		$msg = array
 		(
@@ -144,6 +144,11 @@ class Api extends CI_Controller {
 }
 	  public function  registration()
 	  {
+		  $target_path = dirname(__FILE__).'/uploads/';
+		  if (isset($_FILES['image']['name'])) {
+    $target_path = $target_path . basename($_FILES['image']['name']);
+	move_uploaded_file($_FILES['image']['tmp_name'], $target_path)
+		  }
 		try
 		{
 			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no'))
@@ -186,13 +191,11 @@ class Api extends CI_Controller {
 		try
 		{
 		if($this->input->post("email_token") && $this->input->post("mobile_token") && $this->input->post("user_id"))  
-		 {//echo 'hiss';
+		 {
 			$email_token=$this->model_api->check_email_token(); 
 			$mobile_token=$this->model_api->check_mobile_token();
-//print_r($email_token);
 			if($email_token && $mobile_token)
 			{
-//echo 'hi';
 				$date=date('Y-m-d h:i:s');
 				$min_email=$email_token[0]->created;
 				$min_phone=$mobile_token[0]->created;
@@ -203,7 +206,7 @@ class Api extends CI_Controller {
 				$registration_date_phone = date_create($date); //Replace static date with your database field
 				$expiration_date_phone = date_create($min_phone); //Replace static date with your database field
 				$phone=date_diff($registration_date_phone,$expiration_date_phone);
-                                $phone_min=$phone->format("%i");
+                $phone_min=$phone->format("%i");
 				if($email_min>=30)
 				{
 				  $data['request']=false;
@@ -221,8 +224,8 @@ class Api extends CI_Controller {
 				}
 				else
 				{
-                                  $email_token=$this->model_api->update_email_token($email_token[0]->email_token_id); 
-			          $mobile_token=$this->model_api->update_mobile_token($mobile_token[0]->token_id);
+                  $email_token=$this->model_api->update_email_token($email_token[0]->email_token_id); 
+			      $mobile_token=$this->model_api->update_mobile_token($mobile_token[0]->token_id);
 				  $data['request']=true;
 				  $data['message']="Verification code match";
 				  $data['request_id']=1;
@@ -417,14 +420,14 @@ class Api extends CI_Controller {
 		   $check=$this->model_object->getAllFromWhereParticular('user',"username='".$this->input->post('username')."'","user_id");
 		   if($check)
 		   {
-			$data['request']=false;
+			$data['request']=true;
 			$data['message']="User Exist";
-			$data['request_id']=0;
+			$data['request_id']=1;
 			echo json_encode($data);  
 		   }
 		   else
 		   {
-			$data['request']=true;
+			$data['request']=false;
 			$data['message']="User not Exist";
 			$data['request_id']=1;
 			echo json_encode($data); 
@@ -433,7 +436,7 @@ class Api extends CI_Controller {
 		  else
 		  {
 			$data['request']=false;
-			$data['message']="User Exist";
+			$data['message']="failed";
 			$data['request_id']=0;
 			echo json_encode($data); 
 		  }
@@ -444,14 +447,14 @@ class Api extends CI_Controller {
 		   $check=$this->model_object->getAllFromWhereParticular('user',"phone_no ='".$this->input->post('mobile')."'","user_id");
 		   if($check)
 		   {
-			$data['request']=false;
+			$data['request']=true;
 			$data['message']="Phone number Exist";
-			$data['request_id']=0;
+			$data['request_id']=1;
 			echo json_encode($data);  
 		   }
 		   else
 		   {
-			$data['request']=true;
+			$data['request']=false;
 			$data['message']="Phone number not Exist";
 			$data['request_id']=1;
 			echo json_encode($data); 
@@ -460,7 +463,7 @@ class Api extends CI_Controller {
 		  else
 		  {
 			$data['request']=false;
-			$data['message']="Phone number Exist";
+			$data['message']="not";
 			$data['request_id']=0;
 			echo json_encode($data); 
 		  }
@@ -471,14 +474,14 @@ class Api extends CI_Controller {
 		   $check=$this->model_object->getAllFromWhereParticular('user',"email_id='".$this->input->post('email')."'","user_id");
 		   if($check)
 		   {
-			$data['request']=false;
+			$data['request']=true;
 			$data['message']="Email Exist";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		   }
 		   else
 		   {
-			$data['request']=true;
+			$data['request']=false;
 			$data['message']="Email not Exist";
 			$data['request_id']=1;
 			echo json_encode($data); 
@@ -672,7 +675,7 @@ class Api extends CI_Controller {
 				$check_valid=$this->model_object->getAllFromWhereParticular('place_bids',"service_id=".$this->input->post('service_id')." and user_id=".$this->input->post('user_id')." and bid_id =".$this->input->post('bid_id'),"service_id");  
 				if(count($check_valid)>0)
 				{
-					$check=$this->model_api->withdrawBidToken()
+					$check=$this->model_api->withdrawBidToken();
 					if($check)
 					{
 						$data['request']=true;
@@ -746,13 +749,67 @@ class Api extends CI_Controller {
 		  } 
 	  }
 	  
+	  
+	  public function viewMyWatchList()
+	  {
+		 try
+		 {
+			 if($this->input->post('user_id'))
+			 {
+				 $check=$this->model_api->viewMyWatchList();
+				 if($check)
+				 {
+					  $data['request']=true;
+					  $data['message']="successfull";
+					  $data['request_id']=1;
+					  $data['data']=$check;
+					  echo json_encode($data);
+				 }
+				 else
+				 {
+					$data['request']=false;
+					$data['message']="Something Wrong";
+					$data['request_id']=0;
+					echo json_encode($data);
+				 }
+			 }
+			 else
+			 {
+			    $data['request']=false;
+				$data['message']="Something Wrong";
+				$data['request_id']=0;
+				echo json_encode($data);  
+			 }
+		 }
+		 catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
 	  public function addWatchList()
 	  {
 		  try
 		  {
 			  if($this->input->post('user_id') && $this->input->post('service_id') && $this->input->post('token'))
 			  {
-				  
+				  $check=$this->model_api->addWatchList();
+				  if($check)
+				  {
+					  $data['request']=true;
+		              $data['message']="Added Successfully";
+			          $data['request_id']=0;
+			          echo json_encode($data);  
+				  }
+				  else
+				  {
+					  $data['request']=false;
+		              $data['message']="Something Wrong";
+			          $data['request_id']=0;
+			          echo json_encode($data);  
+				  }
 			  }
 			  else
 			  {
@@ -764,6 +821,45 @@ class Api extends CI_Controller {
 			  }
 		  }
 		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function viewMyBids()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_id'))
+			  {
+				  $get=$this->model_api->viewMyBids();
+				  if(count($get)>0)
+				  {
+					  $data['request']=true;
+					  $data['message']="Successfull";
+					  $data['request_id']=1;
+					  $data['bid_val']=$get;
+					  echo json_encode($data); 
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Something Wrong";
+					  $data['request_id']=0;
+					  echo json_encode($data); 
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Something Wrong";
+				  $data['request_id']=0;
+				  echo json_encode($data); 
+			  }
+		  }
+		 catch (Exception $e)
 		  {
 			$data['request']=false;
 			$data['message']="Something Wrong";
