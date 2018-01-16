@@ -1,6 +1,6 @@
 <?php
 
-include('model_log.php');
+include_once('model_log.php');
 	class Model_servicetype extends CI_Model {
   
 	public function __construct()
@@ -23,7 +23,7 @@ include('model_log.php');
 				$ins['created']=$created;
 				
 				/*--Inserting the record to Database..*/
-				$this->db->insert('servicetypes', $ins); 
+				$this->db->insert('service_types', $ins); 
 			}
 			else
 			{
@@ -53,7 +53,7 @@ include('model_log.php');
 					
 					/*--Updating the record to Database..*/
 					$this->db->where('type_id', $id);
-					$this->db->update('servicetypes', $ins); 
+					$this->db->update('service_types', $ins); 
 				}
 				else
 				{
@@ -77,8 +77,9 @@ include('model_log.php');
 	{
 		 try
 		 {
-			$q = $this->db->get('servicetypes');
+			$q = $this->db->get('service_types');
 			$data = $q->result_array();
+			return $data;
 		 }
 		 catch(Exception $e)
 		 {
@@ -95,8 +96,9 @@ public function getservicetypesbyid()//-Get servicetypes by ID
 			if($this->input->post('hdid'))
 			{
 				$this->db->where('type_id', $id);
-				$q = $this->db->get('servicetypes');
+				$q = $this->db->get('service_types');
 				$data = $q->result_array();
+				return $data;
 			}
 			else
 			{
@@ -118,7 +120,7 @@ public function getservicetypesbyid()//-Get servicetypes by ID
 				$id=$this->input->post('hdid');
 				/*--Deleting the record from Database..*/
 				$this->db->where('type_id', $id);
-				$del=$this->db->delete('servicetypes');   
+				$del=$this->db->delete('service_types');   
 				return $del;
 			}
 			else

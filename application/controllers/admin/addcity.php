@@ -11,13 +11,20 @@ class Addcity extends CI_Controller {
 		 $this->load->model('model_test');
 		 $this->load->model('model_api');
 		 $this->load->model('model_city');
+		 $this->load->model('model_country');
 		// $check=$this->check_valid();
 			
 	  }
 	  
 	  public function index()
 	  {
-		 
+		  if($this->input->post('city_name') && $this->input->post('country_id'))
+		  {
+			  $this->model_city->createcity(); 
+			  redirect('admin/viewcity');
+		  }
+	
+		 $data['country'] = $this->model_country->getcountries();
 		 $data["title"]="Create City";
 		 $this->load->view('admin/common/header',$data);
 		 $this->load->view('admin/common/left_menu');

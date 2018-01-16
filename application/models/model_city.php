@@ -1,6 +1,6 @@
 <?php
 
-	include('model_log.php');
+	include_once('model_log.php');
 	class Model_city extends CI_Model {
   
 	public function __construct()
@@ -19,8 +19,7 @@
 			{
 				$ins['city_name']=$this->input->post('city_name');
 				$ins['country_id']=$this->input->post('country_id');
-				$ins['created']=$created;
-				
+				$ins['created']=date('Y-m-d H:i:s');
 				/*--Inserting the record to Database..*/
 				$this->db->insert('city', $ins); 
 			}
@@ -75,8 +74,8 @@ public function updatecity()//--Update city Function for updating cities
 	{
 		 try
 		 {
-			$this->db->join('country', 'city.country_id = country.country_id');
-			$q = $this->db->get('city');
+			 
+			$q=$this->db->query("select c.*, cnt.name as cnt_name from city as c,country as cnt where c.country_id=cnt.country_id");
 			$data = $q->result_array();
 			return $data;
 		 }

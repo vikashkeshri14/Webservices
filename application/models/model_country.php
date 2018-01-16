@@ -1,6 +1,6 @@
 <?php
 
-	include('model_log.php');
+	include_once('model_log.php');
 	class Model_country extends CI_Model {
   
 	public function __construct()
@@ -76,6 +76,7 @@ public function updatecountry()//--Update Country Function for updating countrie
 		 {
 			$q = $this->db->get('country');
 			$data = $q->result_array();
+			return $data;
 		 }
 		 catch(Exception $e)
 		 {
@@ -94,6 +95,7 @@ public function getcountriesbyid()//-Get countries by ID
 				$this->db->where('country_id', $id);
 				$q = $this->db->get('country');
 				$data = $q->result_array();
+				return $data;
 			}
 			else
 			{

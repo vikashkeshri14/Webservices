@@ -1,5 +1,5 @@
   <?php
-  include('model_log.php');
+  include_once('model_log.php');
   class Model_user extends CI_Model {
   
 	public function __construct()
@@ -99,6 +99,7 @@
 		 {
 			$q = $this->db->get('user');
 			$data = $q->result_array();
+			return $data;
 		 }
 		 catch(Exception $e)
 		 {
@@ -142,6 +143,7 @@
 				$this->db->where('id', $id);
 				$q = $this->db->get('user');
 				$data = $q->result_array();
+				return $data;
 			}
 			else
 			{

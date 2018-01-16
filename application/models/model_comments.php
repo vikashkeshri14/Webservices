@@ -1,6 +1,6 @@
 <?php
 
-	include('model_log.php');
+	include_once('model_log.php');
 	class Model_comments extends CI_Model {
   
 	public function __construct()
@@ -12,14 +12,15 @@
    
 
 
-	 public function getcommentlist()//--Getting complete list of comments available
-		{
-			 try
-			 {
-				$q = $this->db->get('comment');
-				$data = $q->result_array();
-			 }
-			 catch(Exception $e)
+	public function getcommentlist()//--Getting complete list of comments available
+	{
+	 try
+		 {
+			$q = $this->db->get('comment');
+			$data = $q->result_array();
+			return $data;
+		 }
+		 catch(Exception $e)
 			 {
 				 /* Need to add the Logger class */
 				logwrite( 'Model_comments.php >> getcommentlist >> '.$e->getMessage());
@@ -36,6 +37,7 @@
 				$this->db->where('comment_id', $id);
 				$q = $this->db->get('comment');
 				$data = $q->result_array();
+				return $data;
 			}
 			else
 			{
