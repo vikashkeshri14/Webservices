@@ -144,6 +144,11 @@ class Api extends CI_Controller {
 }
 	  public function  registration()
 	  {
+		  $target_path = dirname(__FILE__).'/uploads/';
+		  if (isset($_FILES['image']['name'])) {
+    $target_path = $target_path . basename($_FILES['image']['name']);
+	move_uploaded_file($_FILES['image']['tmp_name'], $target_path)
+		  }
 		try
 		{
 			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no'))
@@ -415,14 +420,14 @@ class Api extends CI_Controller {
 		   $check=$this->model_object->getAllFromWhereParticular('user',"username='".$this->input->post('username')."'","user_id");
 		   if($check)
 		   {
-			$data['request']=false;
+			$data['request']=true;
 			$data['message']="User Exist";
-			$data['request_id']=0;
+			$data['request_id']=1;
 			echo json_encode($data);  
 		   }
 		   else
 		   {
-			$data['request']=true;
+			$data['request']=false;
 			$data['message']="User not Exist";
 			$data['request_id']=1;
 			echo json_encode($data); 
@@ -431,7 +436,7 @@ class Api extends CI_Controller {
 		  else
 		  {
 			$data['request']=false;
-			$data['message']="User Exist";
+			$data['message']="failed";
 			$data['request_id']=0;
 			echo json_encode($data); 
 		  }
@@ -442,14 +447,14 @@ class Api extends CI_Controller {
 		   $check=$this->model_object->getAllFromWhereParticular('user',"phone_no ='".$this->input->post('mobile')."'","user_id");
 		   if($check)
 		   {
-			$data['request']=false;
+			$data['request']=true;
 			$data['message']="Phone number Exist";
-			$data['request_id']=0;
+			$data['request_id']=1;
 			echo json_encode($data);  
 		   }
 		   else
 		   {
-			$data['request']=true;
+			$data['request']=false;
 			$data['message']="Phone number not Exist";
 			$data['request_id']=1;
 			echo json_encode($data); 
@@ -458,7 +463,7 @@ class Api extends CI_Controller {
 		  else
 		  {
 			$data['request']=false;
-			$data['message']="Phone number Exist";
+			$data['message']="not";
 			$data['request_id']=0;
 			echo json_encode($data); 
 		  }
@@ -469,14 +474,14 @@ class Api extends CI_Controller {
 		   $check=$this->model_object->getAllFromWhereParticular('user',"email_id='".$this->input->post('email')."'","user_id");
 		   if($check)
 		   {
-			$data['request']=false;
+			$data['request']=true;
 			$data['message']="Email Exist";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		   }
 		   else
 		   {
-			$data['request']=true;
+			$data['request']=false;
 			$data['message']="Email not Exist";
 			$data['request_id']=1;
 			echo json_encode($data); 
