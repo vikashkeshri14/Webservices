@@ -407,6 +407,21 @@ public function update_email_token($id)
 	}
 	
   }
+  public function updateServiceNotification()
+  {
+	$service_types=implode(',',$this->input->post('service_types'));  
+	$upd['service_types']=$service_types;
+	$this->db->where('user_id',$this->input->post('user_id'));
+	$this->db->update('service_notification', $upd); 
+  }
+  
+  public function insertServiceNotification()
+  {
+	  $service_types=implode(',',$this->input->post('service_types')); 
+	  $ins['service_types']=$service_types;
+	  $ins['user_id']=$this->input->post('user_id');
+	  $this->db->insert('service_notification', $upd); 
+  }
   
   public function extend_services()	
   {
