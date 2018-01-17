@@ -748,7 +748,47 @@ class Api extends CI_Controller {
 			echo json_encode($data);  
 		  } 
 	  }
-	  
+	  public function addCategoryNotification()
+	  {
+		 try
+		 {
+			 if($this->input->post('user_id') && $this->input->post('service_types'))
+			 {
+				$service_types=implode(',',$this->input->post('service_types'));
+				$check=$this->model_object->getAllFromWhereParticular('service_notification',"user_id='".$this->input->post('user_id')."'","user_id");
+				if($check)
+				{
+					$this->model_api->updateServiceNotification();
+					$data['request']=true;
+					$data['message']="Request Succesfull";
+					$data['request_id']=1;
+					echo json_encode($data);  
+				}
+				else
+				{
+					$this->model_api->insertServiceNotification();
+					$data['request']=true;
+					$data['message']="Request Succesfull";
+					$data['request_id']=1;
+					echo json_encode($data);  
+				}
+			 }
+			 else
+			 {
+			    $data['request']=false;
+				$data['message']="Invalid request";
+				$data['request_id']=0;
+				echo json_encode($data);  
+			 }
+		 }
+		 catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  } 
+	  }
 	  
 	  public function viewMyWatchList()
 	  {
@@ -782,6 +822,35 @@ class Api extends CI_Controller {
 			 }
 		 }
 		 catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function removeWatchList()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_id') && $this->input->post('watchlist_id'))
+			  {
+				  $this->model_object->Delete('watchlist',$this->input->post('watchlist_id'));
+				  $data['request']=true;
+				  $data['message']="Remove successfully";
+				  $data['request_id']=1;
+				  echo json_encode($data);
+				  
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid request";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+			  }
+		  }
+		  catch (Exception $e)
 		  {
 			$data['request']=false;
 			$data['message']="Something Wrong";
