@@ -4,12 +4,15 @@ class Api extends CI_Controller {
 	  public function __construct()
 	  {
 		  parent::__construct();
+		  
     	 $this->load->helper('url');
 		 $this->load->library('session');
 		 $this->load->library('form_validation');	
 		 $this->load->model('model_test');
 		 $this->load->model('model_api');
 	  	 $this->load->model('model_auth');
+		 $this->load->model('model_object');
+		 
         /* $verify=$this->model_auth->auth_controller();
 		 if($verify==true)
 		 {
@@ -19,10 +22,13 @@ class Api extends CI_Controller {
 	  }
 	  public function getuser()
 	  {
+		  ob_start('ob_gzhandler');
 		     $data['request']="Success";
-		     $data['data']=$this->model_object->getAllOrder('user','user_id');
+		     $data['data']=$this->model_object->getAllOrderArray('user','user_id');
 		     $data['request_id']=1;
-		     echo json_encode($data);
+			 echo '<pre>';
+		     print_r( json_encode($data));
+			 echo '<pre>';
 	  }
 	  public function getService()
 	  {
