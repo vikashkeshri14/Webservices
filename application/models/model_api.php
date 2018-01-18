@@ -238,7 +238,14 @@ public function update_email_token($id)
   }
   public function viewMyBids()
   {
-	  $query=$this->db->query("select s.title as service_title,p.description as desc,p.bid_amount as amount,p.bid_id as bid_id,p.created as bidDate from service_request as s, place_bids as p where s.service_request_id=p.service_id order by p.created desc");
+	  $query=$this->db->query("select s.title as service_title,p.description as desc,p.bid_amount as amount,p.bid_id as bid_id,p.created as bidDate from service_request as s, place_bids as p where s.service_request_id=p.service_id and p.user_id='".$this->input->post('user_id')."' order by p.created desc");
+	  
+	  return $query->result_array();
+  }
+  
+  public function ViewBidServiceExpire()
+  {
+	  $query=$this->db->query("select s.title as service_title,p.description as desc,p.bid_amount as amount,p.bid_id as bid_id,p.created as bidDate from service_request as s, place_bids as p where s.service_request_id=p.service_id and p.user_id='".$this->input->post('user_id')."' and p.service_id= '".$this->input->post('service_id')."' order by p.created desc");
 	  
 	  return $query->result_array();
   }

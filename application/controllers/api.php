@@ -17,7 +17,13 @@ class Api extends CI_Controller {
 		 }
 		 */
 	  }
-	  
+	  public function getuser()
+	  {
+		     $data['request']="Success";
+		     $data['data']=$this->model_object->getAllOrder('user','user_id');
+		     $data['request_id']=1;
+		     echo json_encode($data);
+	  }
 	  public function getService()
 	  {
 		try
@@ -147,7 +153,7 @@ class Api extends CI_Controller {
 		  $target_path = dirname(__FILE__).'/uploads/';
 		  if (isset($_FILES['image']['name'])) {
     $target_path = $target_path . basename($_FILES['image']['name']);
-	move_uploaded_file($_FILES['image']['tmp_name'], $target_path)
+	move_uploaded_file($_FILES['image']['tmp_name'], $target_path);
 		  }
 		try
 		{
@@ -904,6 +910,45 @@ class Api extends CI_Controller {
 			  if($this->input->post('user_id'))
 			  {
 				  $get=$this->model_api->viewMyBids();
+				  if(count($get)>0)
+				  {
+					  $data['request']=true;
+					  $data['message']="Successfull";
+					  $data['request_id']=1;
+					  $data['bid_val']=$get;
+					  echo json_encode($data); 
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Something Wrong";
+					  $data['request_id']=0;
+					  echo json_encode($data); 
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Something Wrong";
+				  $data['request_id']=0;
+				  echo json_encode($data); 
+			  }
+		  }
+		 catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Something Wrong";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function ViewBidServiceExpire()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_id') && $this->input->post('service_id'))
+			  {
+				  $get=$this->model_api->ViewBidServiceExpire();
 				  if(count($get)>0)
 				  {
 					  $data['request']=true;
