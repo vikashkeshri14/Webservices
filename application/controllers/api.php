@@ -30,24 +30,54 @@ class Api extends CI_Controller {
 		     print_r( json_encode($data));
 			 echo '<pre>';
 	  }
+	  
+	  public function getServiceById()
+	  {
+		  try
+		  {
+			  if($this->input->post("serviceId")){
+				  
+				 $data['request']="Error";
+				 $data['data']=$this->model_object->getElementByIdWhere('service_request','service_request_id',$this->input->post("serviceId"));
+				 $data['request_id']=0;
+				 echo json_encode($data);
+			  }
+			  else
+			  {
+				   $data['request']="Error";
+				   $data['data']="Wrong Request";
+				   $data['request_id']=0;
+				   echo json_encode($data);
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+		     $data['request']="Error";
+		     $data['data']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		 }
+	  }
 	  public function getService()
 	  {
 		try
 		{
-		if($this->input->post("usertoken")){ 
+		//if($this->input->post("usertoken")){ 
+		
 		    $data['request']="Success";
-		     $data['data']=$this->model_test->getService();
+		     $data['data']=$this->model_api->getService();
 		     $data['request_id']=1;
+			 //$data['data']=$data;
 		     echo json_encode($data);
 		/// echo json_encode();
-		}
+		/*}
 		else
 		{
 		     $data['request']="Error";
 		     $data['data']="Wrong Request";
 		     $data['request_id']=0;
 		     echo json_encode($data);
-		}
+		}*/
 	  }
 		 catch (Exception $e)
 		  {
