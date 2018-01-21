@@ -594,7 +594,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -626,7 +626,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -785,7 +785,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  } 
@@ -850,7 +850,7 @@ class Api extends CI_Controller {
 				 else
 				 {
 					$data['request']=false;
-					$data['message']="Something Wrong";
+					$data['message']="Invalid Request";
 					$data['request_id']=0;
 					echo json_encode($data);
 				 }
@@ -858,7 +858,7 @@ class Api extends CI_Controller {
 			 else
 			 {
 			    $data['request']=false;
-				$data['message']="Something Wrong";
+				$data['message']="Invalid Request";
 				$data['request_id']=0;
 				echo json_encode($data);  
 			 }
@@ -866,7 +866,7 @@ class Api extends CI_Controller {
 		 catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -895,7 +895,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -917,7 +917,7 @@ class Api extends CI_Controller {
 				  else
 				  {
 					  $data['request']=false;
-		              $data['message']="Something Wrong";
+		              $data['message']="Invalid Request";
 			          $data['request_id']=0;
 			          echo json_encode($data);  
 				  }
@@ -925,7 +925,7 @@ class Api extends CI_Controller {
 			  else
 			  {
 				  $data['request']=false;
-		          $data['message']="Something Wrong";
+		          $data['message']="Invalid Request";
 			      $data['request_id']=0;
 			      echo json_encode($data);  
 				  
@@ -934,7 +934,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -957,7 +957,7 @@ class Api extends CI_Controller {
 				  else
 				  {
 					  $data['request']=false;
-					  $data['message']="Something Wrong";
+					  $data['message']="Invalid Request";
 					  $data['request_id']=0;
 					  echo json_encode($data); 
 				  }
@@ -965,7 +965,7 @@ class Api extends CI_Controller {
 			  else
 			  {
 				  $data['request']=false;
-				  $data['message']="Something Wrong";
+				  $data['message']="Invalid Request";
 				  $data['request_id']=0;
 				  echo json_encode($data); 
 			  }
@@ -973,7 +973,7 @@ class Api extends CI_Controller {
 		 catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -996,7 +996,7 @@ class Api extends CI_Controller {
 				  else
 				  {
 					  $data['request']=false;
-					  $data['message']="Something Wrong";
+					  $data['message']="Invalid Request";
 					  $data['request_id']=0;
 					  echo json_encode($data); 
 				  }
@@ -1004,7 +1004,7 @@ class Api extends CI_Controller {
 			  else
 			  {
 				  $data['request']=false;
-				  $data['message']="Something Wrong";
+				  $data['message']="Invalid Request";
 				  $data['request_id']=0;
 				  echo json_encode($data); 
 			  }
@@ -1012,11 +1012,38 @@ class Api extends CI_Controller {
 		 catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
 	  }
+	  
+	   /*Comment Section Start */
+	  public function Comment()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_comment_id') && $this->input->post('comment') && $this->input->post('post_id') && $this->input->post('type'))
+			  {
+				  $valid=$this->model_api->comment();
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	   /*Comment Section End */
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');

@@ -451,4 +451,10 @@ public function update_email_token($id)
 	
   }
   
+  /*Comment section start here */
+  public function comment()
+  {
+  }
+  /*Comment Section End Here */
+  
 }
