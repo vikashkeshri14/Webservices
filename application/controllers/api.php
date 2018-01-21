@@ -1126,6 +1126,44 @@ class Api extends CI_Controller {
 			echo json_encode($data);  
 		  }
 	  }
+	  public function ReportSpam()
+	  {
+		  try
+		  {
+			  if($this->input->post('comment_id') && $this->input->post('user_id'))
+			  {
+				  $spam=$this->model_api->ReportSpam();
+				  if($spam){
+				  $data['request']=true;
+				  $data['message']="Successfully done";
+				  $data['request_id']=1;
+				  echo json_encode($data); 
+				  }
+				  else
+				  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);   
+				  }
+
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data); 
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
 	   /*Comment Section End */
 	  public function check_password()
 	  {

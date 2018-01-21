@@ -490,7 +490,22 @@ public function update_email_token($id)
 		  $this->db->where('comment_id',$this->input->post('comment_id'));
 	      $this->db->update('comment', $upd); 
 	      return true;
-		  
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
+  public function ReportSpam()
+  {
+	  if($this->input->post('comment_id') && $this->input->post('user_id'))
+	  {
+		 $created=date('Y-m-d h:i:s');
+		 $ins['comment_id']=$this->input->post('comment_id');
+		 $ins['user_id']=$this->input->post('user_id');
+		 $ins['created']=$created;
+		 $this->db->insert('spam_comment', $ins);
+		 return true;
 	  }
 	  else
 	  {
