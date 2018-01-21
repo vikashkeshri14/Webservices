@@ -114,6 +114,10 @@ class model_object extends CI_Model
 	  {			
 			$this->db->delete($table, array('id' => $id)); 
 	  }
+  function DeleteWhere($table,$field,$val)
+  {
+	  $this->db->delete($table, array($field => $val)); 
+  }
   function Ins_Upd($table)
   {
         $ins=array();

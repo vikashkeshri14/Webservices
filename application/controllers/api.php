@@ -1026,6 +1026,20 @@ class Api extends CI_Controller {
 			  if($this->input->post('user_comment_id') && $this->input->post('comment') && $this->input->post('post_id') && $this->input->post('type'))
 			  {
 				  $valid=$this->model_api->comment();
+				  if($valid)
+				  {
+					  $data['request']=true;
+					  $data['message']="Comment Placed Successfully";
+					  $data['request_id']=1;
+					  echo json_encode($data);
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);
+				  }
 			  }
 			  else
 			  {
@@ -1033,6 +1047,75 @@ class Api extends CI_Controller {
 				  $data['message']="Invalid Request";
 				  $data['request_id']=0;
 				  echo json_encode($data);
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  
+	  
+	  public function UpdateComment()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_comment_id') && $this->input->post('comment_id') && $this->input->post('comment'))
+			  {
+				  $valid=$this->model_api->comment(); 
+				  if($valid)
+				  {
+					  $data['request']=true;
+					  $data['message']="Update Successfully";
+					  $data['request_id']=0;
+					  echo json_encode($data);
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function DeleteComment()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_comment_id') && $this->input->post('comment_id'))
+			  {
+				  $this->model_api->DeleteWhere('comment','comment_id',$this->input->post('comment_id'));
+				  $data['request']=true;
+				  $data['message']="Delete Successfully";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+				  
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
 			  }
 		  }
 		  catch (Exception $e)

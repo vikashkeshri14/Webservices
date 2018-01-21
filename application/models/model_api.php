@@ -454,6 +454,48 @@ public function update_email_token($id)
   /*Comment section start here */
   public function comment()
   {
+	  if($this->input->post('user_comment_id') && $this->input->post('comment') && $this->input->post('post_id') && $this->input->post('type'))
+	  {
+		  $created=date('Y-m-d h:i:s');
+		  $ins['user_comment_id']=$this->input->post('user_comment_id');
+		  $ins['comment']=$this->input->post('comment');
+		  $ins['post_id']=$this->input->post('post_id');
+		  $ins['type']=$this->input->post('type');
+		  if($this->input->post('reply_comment_id'))
+		  $ins['reply_comment_id']=$this->input->post('reply_comment_id');
+		  if($this->input->post('reply'))
+		  $ins['reply']=$this->input->post('reply');
+		  $ins['created']=$created;
+		  $this->db->insert('comment', $ins);
+		  if($this->db->insert_id())
+		  {
+			  return true;
+		  }
+		  else
+		  {
+			  return false;
+		  }
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
+  
+  public function UpdateComment()
+  {
+	  if($this->input->post('user_comment_id') && $this->input->post('comment_id') && $this->input->post('comment'))
+	  {
+		  $upd['comment']=$this->input->post('comment');
+		  $this->db->where('comment_id',$this->input->post('comment_id'));
+	      $this->db->update('comment', $upd); 
+	      return true;
+		  
+	  }
+	  else
+	  {
+		  return false;
+	  }
   }
   /*Comment Section End Here */
   
