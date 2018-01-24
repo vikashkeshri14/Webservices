@@ -18,7 +18,7 @@
 			if($this->input->post('name'))
 			{
 				$ins['name']=$this->input->post('name');
-				$ins['created']=$created;
+				$ins['created']=date('Y-m-d H:i:s');
 				
 				/*--Inserting the record to Database..*/
 				$this->db->insert('country', $ins); 
@@ -43,7 +43,7 @@ public function updatecountry()//--Update Country Function for updating countrie
 		if($this->input->post('name'))
 		{
 			$ins['name']=$this->input->post('name');
-			$ins['updated']=$updated;
+			$ins['updated']=date('Y-m-d H:i:s');
 			
 			if($this->input->post('hdid'))
 			{
@@ -85,36 +85,26 @@ public function updatecountry()//--Update Country Function for updating countrie
 		 }
 		 
 	 }
-
-public function getcountriesbyid()//-Get countries by ID
+	 public function getcountriesbyid($id)//-Get countries by ID
 	{
-		 try
-		 {
-			if($this->input->post('hdid'))
-			{
-				$this->db->where('country_id', $id);
-				$q = $this->db->get('country');
-				$data = $q->result_array();
-				return $data;
-			}
-			else
-			{
-				return false;
-			}
-		 }
-		 catch(Exception $e)
-		 {
-			 /* Need to add the Logger class */
+		try
+		{
+			$q=$this->db->query("select c.* from country as c where c.country_id=".$id);
+			$data = $q->result_array();
+			return $data;
+		}
+		catch(Exception $e)//catch exception
+		{
 			logwrite( 'model_country.php >> getcountriesbyid >> '.$e->getMessage());
-		 }		 
-	 }
-	 public function deletecountry() //-Deleting the record from the table
+			return false;
+		}
+	}
+	 public function deletecountry($id) //-Deleting the record from the table
 	 {
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$id=$this->input->post('hdid');
 				/*--Deleting the record from Database..*/
 				$this->db->where('country_id', $id);
 				$del=$this->db->delete('country');   

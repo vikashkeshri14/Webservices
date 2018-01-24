@@ -35,42 +35,55 @@
 		}
 	}
 
-public function updatecity()//--Update city Function for updating cities
-{
-	try
+	public function updatecity()//--Update city Function for updating cities
 	{
-		if($this->input->post('city_name') && $this->input->post('country_id'))
+		try
 		{
-			$ins['city_name']=$this->input->post('city_name');
-			$ins['country_id']=$this->input->post('country_id');
-			$ins['updated']=$updated;
-			
-			if($this->input->post('hdid'))
+			if($this->input->post('city_name') && $this->input->post('country_id'))
 			{
-				$id=$this->input->post('hdid');
+				$ins['city_name']=$this->input->post('city_name');
+				$ins['country_id']=$this->input->post('country_id');
+				$ins['updated']=date('Y-m-d H:i:s');
 				
-				/*--Updating the record to Database..*/
-				$this->db->where('city_id', $id);
-				$this->db->update('city', $ins); 
+				if($this->input->post('hdid'))
+				{
+					$id=$this->input->post('hdid');
+					
+					/*--Updating the record to Database..*/
+					$this->db->where('city_id', $id);
+					$this->db->update('city', $ins); 
+				}
+				else
+				{
+					return false;
+				}
 			}
 			else
 			{
 				return false;
 			}
 		}
-		else
+		catch(Exception $e)//catch exception
 		{
+			logwrite( 'model_city.php >> updatecity >> '.$e->getMessage());
 			return false;
 		}
 	}
-	catch(Exception $e)//catch exception
+	public function getElementById($id)
 	{
-		logwrite( 'model_city.php >> updatecity >> '.$e->getMessage());
-		return false;
+		try
+		{
+			$q=$this->db->query("select c.* from city as c where c.city_id=".$id);
+			$data = $q->result_array();
+			return $data;
+		}
+		catch(Exception $e)//catch exception
+		{
+			logwrite( 'model_city.php >> getElementById >> '.$e->getMessage());
+			return false;
+		}
 	}
-}
-
- public function getcities()//--Getting complete list of cities available
+ 	public function getcities()//--Getting complete list of cities available
 	{
 		 try
 		 {
@@ -87,7 +100,7 @@ public function updatecity()//--Update city Function for updating cities
 		 
 	 }
 
-public function getcitiesbyid()//-Get cities by ID
+	public function getcitiesbyid()//-Get cities by ID
 	{
 		 try
 		 {
@@ -108,13 +121,13 @@ public function getcitiesbyid()//-Get cities by ID
 			logwrite( 'model_city.php >> getcitiesbyid >> '.$e->getMessage());
 		 }		 
 	 }
-	 public function deletecity() //-Deleting the record from the table
+	 public function deletecity($id) //-Deleting the record from the table
 	 {
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$id=$this->input->post('hdid');
+				//$id=$this->input->post('hdid');
 				/*--Deleting the record from Database..*/
 				$this->db->where('city_id', $id);
 				$del=$this->db->delete('city');   
@@ -127,7 +140,6 @@ public function getcitiesbyid()//-Get cities by ID
 		 }
 		catch(Exception $y)
 		 {
-			 /* Need to add the Logger class */
 			logwrite( 'model_city.php >> deletecity >> '.$y->getMessage());
 		 }
 	}
