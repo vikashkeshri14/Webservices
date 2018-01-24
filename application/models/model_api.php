@@ -496,6 +496,7 @@ public function update_email_token($id)
 		  return false;
 	  }
   }
+  
   public function ReportSpam()
   {
 	  if($this->input->post('comment_id') && $this->input->post('user_id'))

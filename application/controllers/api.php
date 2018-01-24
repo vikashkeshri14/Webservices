@@ -133,6 +133,7 @@ class Api extends CI_Controller {
 		     $data['request_id']=1;
 		     echo json_encode($data);
 		/// echo json_encode();
+		
 		}
 		else
 		{
@@ -1165,6 +1166,21 @@ class Api extends CI_Controller {
 		  }
 	  }
 	   /*Comment Section End */
+	   
+	   /*Accept Bid*/
+	  public function acceptBid()
+	  {
+		  try
+		  {
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');
