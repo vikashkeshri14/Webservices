@@ -20,6 +20,24 @@ class Api extends CI_Controller {
 		 }
 		 */
 	  }
+	  public function user()
+	  {
+		  $check=$this->model_object->getElementByIdWhere("user","user_id",$this->input->post("user_id"));
+		  if($check)
+		  {
+			  ob_start('ob_gzhandler');
+		     $data['request']=true;
+		     $data['request_id']=1;
+			 echo  json_encode($data);
+		  }
+		  else
+		  {
+			  ob_start('ob_gzhandler');
+		     $data['request']=false;
+		     $data['request_id']=0;
+			 echo  json_encode($data);
+		  }
+	  }
 	  public function getuser()
 	  {
 		  ob_start('ob_gzhandler');
