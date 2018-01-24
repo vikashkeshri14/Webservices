@@ -4,12 +4,15 @@ class Api extends CI_Controller {
 	  public function __construct()
 	  {
 		  parent::__construct();
+		  
     	 $this->load->helper('url');
 		 $this->load->library('session');
 		 $this->load->library('form_validation');	
 		 $this->load->model('model_test');
 		 $this->load->model('model_api');
 	  	 $this->load->model('model_auth');
+		 $this->load->model('model_object');
+		 
         /* $verify=$this->model_auth->auth_controller();
 		 if($verify==true)
 		 {
@@ -17,25 +20,64 @@ class Api extends CI_Controller {
 		 }
 		 */
 	  }
+	  public function getuser()
+	  {
+		  ob_start('ob_gzhandler');
+		     $data['request']="Success";
+		     $data['data']=$this->model_object->getAllOrderArray('user','user_id');
+		     $data['request_id']=1;
+			 echo '<pre>';
+		     print_r( json_encode($data));
+			 echo '<pre>';
+	  }
 	  
+	  public function getServiceById()
+	  {
+		  try
+		  {
+			  if($this->input->post("serviceId")){
+				  
+				 $data['request']="Error";
+				 $data['data']=$this->model_object->getElementByIdWhere('service_request','service_request_id',$this->input->post("serviceId"));
+				 $data['request_id']=0;
+				 echo json_encode($data);
+			  }
+			  else
+			  {
+				   $data['request']="Error";
+				   $data['data']="Wrong Request";
+				   $data['request_id']=0;
+				   echo json_encode($data);
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+		     $data['request']="Error";
+		     $data['data']="Wrong Request";
+		     $data['request_id']=0;
+		     echo json_encode($data);
+		 }
+	  }
 	  public function getService()
 	  {
 		try
 		{
-		if($this->input->post("usertoken")){ 
+		//if($this->input->post("usertoken")){ 
+		
 		    $data['request']="Success";
-		     $data['data']=$this->model_test->getService();
+		     $data['data']=$this->model_api->getService();
 		     $data['request_id']=1;
+			 //$data['data']=$data;
 		     echo json_encode($data);
 		/// echo json_encode();
-		}
+		/*}
 		else
 		{
 		     $data['request']="Error";
 		     $data['data']="Wrong Request";
 		     $data['request_id']=0;
 		     echo json_encode($data);
-		}
+		}*/
 	  }
 		 catch (Exception $e)
 		  {
@@ -147,7 +189,7 @@ class Api extends CI_Controller {
 		  $target_path = dirname(__FILE__).'/uploads/';
 		  if (isset($_FILES['image']['name'])) {
     $target_path = $target_path . basename($_FILES['image']['name']);
-	move_uploaded_file($_FILES['image']['tmp_name'], $target_path)
+	move_uploaded_file($_FILES['image']['tmp_name'], $target_path);
 		  }
 		try
 		{
@@ -552,7 +594,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -584,7 +626,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -743,12 +785,52 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  } 
 	  }
-	  
+	  public function addCategoryNotification()
+	  {
+		 try
+		 {
+			 if($this->input->post('user_id') && $this->input->post('service_types'))
+			 {
+				$service_types=implode(',',$this->input->post('service_types'));
+				$check=$this->model_object->getAllFromWhereParticular('service_notification',"user_id='".$this->input->post('user_id')."'","user_id");
+				if($check)
+				{
+					$this->model_api->updateServiceNotification();
+					$data['request']=true;
+					$data['message']="Request Succesfull";
+					$data['request_id']=1;
+					echo json_encode($data);  
+				}
+				else
+				{
+					$this->model_api->insertServiceNotification();
+					$data['request']=true;
+					$data['message']="Request Succesfull";
+					$data['request_id']=1;
+					echo json_encode($data);  
+				}
+			 }
+			 else
+			 {
+			    $data['request']=false;
+				$data['message']="Invalid request";
+				$data['request_id']=0;
+				echo json_encode($data);  
+			 }
+		 }
+		 catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  } 
+	  }
 	  
 	  public function viewMyWatchList()
 	  {
@@ -768,7 +850,7 @@ class Api extends CI_Controller {
 				 else
 				 {
 					$data['request']=false;
-					$data['message']="Something Wrong";
+					$data['message']="Invalid Request";
 					$data['request_id']=0;
 					echo json_encode($data);
 				 }
@@ -776,7 +858,7 @@ class Api extends CI_Controller {
 			 else
 			 {
 			    $data['request']=false;
-				$data['message']="Something Wrong";
+				$data['message']="Invalid Request";
 				$data['request_id']=0;
 				echo json_encode($data);  
 			 }
@@ -784,7 +866,36 @@ class Api extends CI_Controller {
 		 catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function removeWatchList()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_id') && $this->input->post('watchlist_id'))
+			  {
+				  $this->model_object->Delete('watchlist',$this->input->post('watchlist_id'));
+				  $data['request']=true;
+				  $data['message']="Remove successfully";
+				  $data['request_id']=1;
+				  echo json_encode($data);
+				  
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid request";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -806,7 +917,7 @@ class Api extends CI_Controller {
 				  else
 				  {
 					  $data['request']=false;
-		              $data['message']="Something Wrong";
+		              $data['message']="Invalid Request";
 			          $data['request_id']=0;
 			          echo json_encode($data);  
 				  }
@@ -814,7 +925,7 @@ class Api extends CI_Controller {
 			  else
 			  {
 				  $data['request']=false;
-		          $data['message']="Something Wrong";
+		          $data['message']="Invalid Request";
 			      $data['request_id']=0;
 			      echo json_encode($data);  
 				  
@@ -823,7 +934,7 @@ class Api extends CI_Controller {
 		  catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
@@ -846,7 +957,7 @@ class Api extends CI_Controller {
 				  else
 				  {
 					  $data['request']=false;
-					  $data['message']="Something Wrong";
+					  $data['message']="Invalid Request";
 					  $data['request_id']=0;
 					  echo json_encode($data); 
 				  }
@@ -854,7 +965,7 @@ class Api extends CI_Controller {
 			  else
 			  {
 				  $data['request']=false;
-				  $data['message']="Something Wrong";
+				  $data['message']="Invalid Request";
 				  $data['request_id']=0;
 				  echo json_encode($data); 
 			  }
@@ -862,11 +973,198 @@ class Api extends CI_Controller {
 		 catch (Exception $e)
 		  {
 			$data['request']=false;
-			$data['message']="Something Wrong";
+			$data['message']="Invalid Request";
 			$data['request_id']=0;
 			echo json_encode($data);  
 		  }
 	  }
+	  public function ViewBidServiceExpire()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_id') && $this->input->post('service_id'))
+			  {
+				  $get=$this->model_api->ViewBidServiceExpire();
+				  if(count($get)>0)
+				  {
+					  $data['request']=true;
+					  $data['message']="Successfull";
+					  $data['request_id']=1;
+					  $data['bid_val']=$get;
+					  echo json_encode($data); 
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data); 
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data); 
+			  }
+		  }
+		 catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  
+	   /*Comment Section Start */
+	  public function Comment()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_comment_id') && $this->input->post('comment') && $this->input->post('post_id') && $this->input->post('type'))
+			  {
+				  $valid=$this->model_api->comment();
+				  if($valid)
+				  {
+					  $data['request']=true;
+					  $data['message']="Comment Placed Successfully";
+					  $data['request_id']=1;
+					  echo json_encode($data);
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  
+	  
+	  public function UpdateComment()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_comment_id') && $this->input->post('comment_id') && $this->input->post('comment'))
+			  {
+				  $valid=$this->model_api->comment(); 
+				  if($valid)
+				  {
+					  $data['request']=true;
+					  $data['message']="Update Successfully";
+					  $data['request_id']=0;
+					  echo json_encode($data);
+				  }
+				  else
+				  {
+					  $data['request']=false;
+					  $data['message']="Invalid Request";
+					  $data['request_id']=0;
+					  echo json_encode($data);
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function DeleteComment()
+	  {
+		  try
+		  {
+			  if($this->input->post('user_comment_id') && $this->input->post('comment_id'))
+			  {
+				  $this->model_api->DeleteWhere('comment','comment_id',$this->input->post('comment_id'));
+				  $data['request']=true;
+				  $data['message']="Delete Successfully";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+				  
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);  
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  public function ReportSpam()
+	  {
+		  try
+		  {
+			  if($this->input->post('comment_id') && $this->input->post('user_id'))
+			  {
+				  $spam=$this->model_api->ReportSpam();
+				  if($spam){
+				  $data['request']=true;
+				  $data['message']="Successfully done";
+				  $data['request_id']=1;
+				  echo json_encode($data); 
+				  }
+				  else
+				  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data);   
+				  }
+
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data); 
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	   /*Comment Section End */
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');

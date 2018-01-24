@@ -32,6 +32,14 @@ class model_object extends CI_Model
 	    $query = $this->db->get();   
 	    return $query->result();	
     } 
+	function getAllOrderArray($table,$order)
+    {
+	    $this->db->select('*');
+	    $this->db->from($table);
+		$this->db->order_by($order, "desc");	
+	    $query = $this->db->get();   
+	    return $query->result_array();	
+    } 
 	function getAllFromWhere($table,$where)
     {
 		//echo "SELECT * FROM ".$table." where ".$where." order by id desc";
@@ -106,6 +114,10 @@ class model_object extends CI_Model
 	  {			
 			$this->db->delete($table, array('id' => $id)); 
 	  }
+  function DeleteWhere($table,$field,$val)
+  {
+	  $this->db->delete($table, array($field => $val)); 
+  }
   function Ins_Upd($table)
   {
         $ins=array();

@@ -1,5 +1,5 @@
 <?php
-class Model_api extends CI_Model {
+class Model_Api extends CI_Model {
 
   public function __construct()
   {
@@ -238,7 +238,14 @@ public function update_email_token($id)
   }
   public function viewMyBids()
   {
-	  $query=$this->db->query("select s.title as service_title,p.description as desc,p.bid_amount as amount,p.bid_id as bid_id,p.created as bidDate from service_request as s, place_bids as p where s.service_request_id=p.service_id order by p.created desc");
+	  $query=$this->db->query("select s.title as service_title,p.description as desc,p.bid_amount as amount,p.bid_id as bid_id,p.created as bidDate from service_request as s, place_bids as p where s.service_request_id=p.service_id and p.user_id='".$this->input->post('user_id')."' order by p.created desc");
+	  
+	  return $query->result_array();
+  }
+  
+  public function ViewBidServiceExpire()
+  {
+	  $query=$this->db->query("select s.title as service_title,p.description as desc,p.bid_amount as amount,p.bid_id as bid_id,p.created as bidDate from service_request as s, place_bids as p where s.service_request_id=p.service_id and p.user_id='".$this->input->post('user_id')."' and p.service_id= '".$this->input->post('service_id')."' order by p.created desc");
 	  
 	  return $query->result_array();
   }
@@ -407,6 +414,21 @@ public function update_email_token($id)
 	}
 	
   }
+  public function updateServiceNotification()
+  {
+	$service_types=implode(',',$this->input->post('service_types'));  
+	$upd['service_types']=$service_types;
+	$this->db->where('user_id',$this->input->post('user_id'));
+	$this->db->update('service_notification', $upd); 
+  }
+  
+  public function insertServiceNotification()
+  {
+	  $service_types=implode(',',$this->input->post('service_types')); 
+	  $ins['service_types']=$service_types;
+	  $ins['user_id']=$this->input->post('user_id');
+	  $this->db->insert('service_notification', $upd); 
+  }
   
   public function extend_services()	
   {
@@ -428,5 +450,68 @@ public function update_email_token($id)
 	}
 	
   }
+  
+  /*Comment section start here */
+  public function comment()
+  {
+	  if($this->input->post('user_comment_id') && $this->input->post('comment') && $this->input->post('post_id') && $this->input->post('type'))
+	  {
+		  $created=date('Y-m-d h:i:s');
+		  $ins['user_comment_id']=$this->input->post('user_comment_id');
+		  $ins['comment']=$this->input->post('comment');
+		  $ins['post_id']=$this->input->post('post_id');
+		  $ins['type']=$this->input->post('type');
+		  if($this->input->post('reply_comment_id'))
+		  $ins['reply_comment_id']=$this->input->post('reply_comment_id');
+		  if($this->input->post('reply'))
+		  $ins['reply']=$this->input->post('reply');
+		  $ins['created']=$created;
+		  $this->db->insert('comment', $ins);
+		  if($this->db->insert_id())
+		  {
+			  return true;
+		  }
+		  else
+		  {
+			  return false;
+		  }
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
+  
+  public function UpdateComment()
+  {
+	  if($this->input->post('user_comment_id') && $this->input->post('comment_id') && $this->input->post('comment'))
+	  {
+		  $upd['comment']=$this->input->post('comment');
+		  $this->db->where('comment_id',$this->input->post('comment_id'));
+	      $this->db->update('comment', $upd); 
+	      return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
+  public function ReportSpam()
+  {
+	  if($this->input->post('comment_id') && $this->input->post('user_id'))
+	  {
+		 $created=date('Y-m-d h:i:s');
+		 $ins['comment_id']=$this->input->post('comment_id');
+		 $ins['user_id']=$this->input->post('user_id');
+		 $ins['created']=$created;
+		 $this->db->insert('spam_comment', $ins);
+		 return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
+  /*Comment Section End Here */
   
 }
