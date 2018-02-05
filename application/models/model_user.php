@@ -17,6 +17,7 @@
 			  {
 				  /*--Encrypting the Password before saving*/
 				$password=$this->password_encrypt($this->input->post('password'));
+				$ins['name']=$this->input->post('name');
 				$ins['username']=$this->input->post('username');
 				$ins['email_id']=$this->input->post('email_id');
 				$ins['phone_no']=$this->input->post('phone_no');
@@ -55,6 +56,7 @@
 			  {
 				  /*--Encrypting the Password before Updating the record*/
 				$password=$this->password_encrypt($this->input->post('password'));
+				$ins['name']=$this->input->post('name');
 				$ins['username']=$this->input->post('username');
 				$ins['email_id']=$this->input->post('email_id');
 				$ins['phone_no']=$this->input->post('phone_no');
@@ -73,8 +75,8 @@
 				{
 					$id=$this->input->post('hdid');
 				/*--Updating the record to Database..*/
-				$this->db->where('id', $id);
-				$this->db->update('user', $ins); 
+					$this->db->where('id', $id);
+					$this->db->update('user', $ins); 
 				}
 				else
 				{
@@ -97,25 +99,24 @@
 	 {
 		 try
 		 {
-			$q = $this->db->get('user');
+			/*$q=$this->db->query("select u.*,case u.gender when 1 then 'Male' when 2 then 'Female' else 'N/A' end gender, r.name as rol_name,ct.city_name,cnt.name as country_name,case u.status when 0 then 'Disable' else 'Enable' end status from user as u,role as r,city as ct,country as cnt where u.role_id=r.role_id &&
+			u.country=cnt.country_id && u.city = ct.city_id");*/
+			
+			$q=$this->db->query("select u.*,case u.gender when 1 then 'Male' when 2 then 'Female' else 'N/A' end gender, r.name as rol_name,case u.status when 0 then 'Disable' else 'Enable' end status from user as u,role as r where u.role_id=r.role_id ");
 			$data = $q->result_array();
 			return $data;
 		 }
 		 catch(Exception $e)
 		 {
-			 /* Need to add the Logger class */
-			//echo 'Message: ' .$r->getMessage();
 			logwrite( 'model_user.php >> getusers >> '.$e->getMessage());
-		 }
-		 
+		 }		 
 	 }
-	 public function deleteRecord() //-Deleting the record from the table
+	 public function deleteRecord($id) //-Deleting the record from the table
 	 {
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$id=$this->input->post('hdid');
 				/*--Deleting the record from Database..*/
 				$this->db->where('id', $id);
 				$del=$this->db->delete('user');   
@@ -134,14 +135,13 @@
 	}
 	
 	
-	public function getuserbyid()//-Get User by ID
+	public function getuserbyid($id)//-Get User by ID
 	 {
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$this->db->where('id', $id);
-				$q = $this->db->get('user');
+				$q=$this->db->query("select u.* from user as u where u.user_id=".$id);
 				$data = $q->result_array();
 				return $data;
 			}
