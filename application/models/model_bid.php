@@ -12,7 +12,23 @@ include('model_log.php');
 	}
 
 	
-	
+	public function getbids()//--Getting complete list of cities available
+	{
+		 try
+		 {
+			 
+			$q=$this->db->query("select b.* from place_bids as b where b.status=1");
+			$data = $q->result_array();
+			return $data;
+		 }
+		 catch(Exception $e)
+		 {
+			 /* Need to add the Logger class */
+			logwrite( 'Model_bid.php >> getbids >> '.$e->getMessage());
+		 }
+		 
+	 }
+	 
 	 public function deletebid() //-Deleting the record from the table
 	 {
 		 try

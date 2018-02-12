@@ -1,6 +1,6 @@
 <?php
 
-include('model_log.php');
+include_once('model_log.php');
 	class Model_servicerequest extends CI_Model {
   
 	public function __construct()
@@ -58,8 +58,12 @@ include('model_log.php');
 	{
 		 try
 		 {
-			$q = $this->db->get('service_request');
+			//$q = $this->db->get('service_request');
+			$q=$this->db->query("SELECT sr.*,srt.name as servicetype,u.username as username FROM service_request as sr
+LEFT join service_types as srt ON srt.type_id= sr.service_types
+LEFT join user as u on u.user_id=sr.user_id");
 			$data = $q->result_array();
+			return $data;
 		 }
 		 catch(Exception $e)
 		 {
@@ -90,13 +94,13 @@ public function getservicerequestbyid()//-Get servicetypes by ID
 			logwrite( 'Model_servicerequest.php >> getservicerequestbyid >> '.$e->getMessage());
 		 }		 
 	 }
-	 public function deleteservicerequest() //-Deleting the record from the table
+	 public function deleteservicerequest($id) //-Deleting the record from the table
 	 {
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$id=$this->input->post('hdid');
+				
 				/*--Deleting the record from Database..*/
 				$this->db->where('service_request_id', $id);
 				$del=$this->db->delete('service_request');   
@@ -115,7 +119,7 @@ public function getservicerequestbyid()//-Get servicetypes by ID
 	}
 	
 	
-public function enabledisableservicerequest()//--Enable/Disable servicerequest
+public function enabledisableservicerequest($id)//--Enable/Disable servicerequest
    {
 	    try 
 		{	

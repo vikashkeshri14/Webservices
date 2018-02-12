@@ -19,7 +19,7 @@
 			{
 				$ins['title']=$this->input->post('title');
 				$ins['description']=$this->input->post('description');
-				$ins['user_id']=$this->input->post('user_id');
+				$ins['user_id']=1;//$this->input->post('user_id');
 				$ins['created']=date('Y-m-d H:i:s');
 				/*--Inserting the record to Database..*/
 				$this->db->insert('cms', $ins); 
@@ -89,11 +89,11 @@ public function updatecms()//--Update cms Function for updating cities
 		 
 	 }
 
-public function getcmsbyid()//-Get cms by ID
+public function getcmsbyid($id)//-Get cms by ID
 	{
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
 				$this->db->where('id', $id);
 				$q = $this->db->get('cms');
@@ -111,13 +111,12 @@ public function getcmsbyid()//-Get cms by ID
 			logwrite( 'model_cms.php >> getcitiesbyid >> '.$e->getMessage());
 		 }		 
 	 }
-	 public function deletecms() //-Deleting the record from the table
+	 public function deletecms($id) //-Deleting the record from the table
 	 {
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$id=$this->input->post('hdid');
 				/*--Deleting the record from Database..*/
 				$this->db->where('id', $id);
 				$del=$this->db->delete('cms');   

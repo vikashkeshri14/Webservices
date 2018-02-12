@@ -19,8 +19,11 @@ include_once('model_log.php');
 			if($this->input->post('name'))
 			{
 				$ins['name']=$this->input->post('name');
+				if($this->input->post('description'))
 				$ins['description']=$this->input->post('description');
-				$ins['created']=$created;
+				else
+				$ins['description']='';
+				$ins['created']=date('Y-m-d H:i:s');
 				
 				/*--Inserting the record to Database..*/
 				$this->db->insert('service_types', $ins); 
@@ -45,7 +48,7 @@ include_once('model_log.php');
 			{
 				$ins['name']=$this->input->post('name');
 				$ins['description']=$this->input->post('description');
-				$ins['updated']=$updated;
+				$ins['updated']=date('Y-m-d H:i:s');
 				
 				if($this->input->post('hdid'))
 				{
@@ -77,7 +80,7 @@ include_once('model_log.php');
 	{
 		 try
 		 {
-			$q = $this->db->get('service_types');
+			$q=$this->db->query("select c.* from service_types as c");
 			$data = $q->result_array();
 			return $data;
 		 }
@@ -89,14 +92,13 @@ include_once('model_log.php');
 		 
 	 }
 
-public function getservicetypesbyid()//-Get servicetypes by ID
+public function getservicetypesbyid($id)//-Get servicetypes by ID
 	{
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$this->db->where('type_id', $id);
-				$q = $this->db->get('service_types');
+				$q=$this->db->query("select c.* from service_types as c where c.type_id=".$id);
 				$data = $q->result_array();
 				return $data;
 			}
@@ -111,13 +113,12 @@ public function getservicetypesbyid()//-Get servicetypes by ID
 			logwrite( 'model_servicetypes.php >> getservicetypesbyid >> '.$e->getMessage());
 		 }		 
 	 }
-	 public function deleteservicetypes() //-Deleting the record from the table
+	 public function deleteservicetypes($id) //-Deleting the record from the table
 	 {
 		 try
 		 {
-			if($this->input->post('hdid'))
+			if($id)
 			{
-				$id=$this->input->post('hdid');
 				/*--Deleting the record from Database..*/
 				$this->db->where('type_id', $id);
 				$del=$this->db->delete('service_types');   
