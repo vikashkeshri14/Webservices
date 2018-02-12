@@ -1190,6 +1190,71 @@ class Api extends CI_Controller {
 	  {
 		  try
 		  {
+			  if($this->input->post('token') && $this->input->post('bidId') && $this->input->post('service_id'))
+			  {
+				 $valid=$this->model_api->valid_token();
+				 if($valid)
+				 {
+					$this->model_api->updateAcceptBid($this->input->post('bidId'));
+					$data['request']=true;
+					$data['message']="Bid Accept Successfully";
+					$data['request_id']=1;
+					echo json_encode($data);  
+				 }
+				 else
+				 {
+					$data['request']=false;
+					$data['message']="Invalid Request";
+					$data['request_id']=0;
+					echo json_encode($data);  
+				 }
+			  }
+			  else
+			  {
+				$data['request']=false;
+				$data['message']="Invalid Request";
+				$data['request_id']=0;
+				echo json_encode($data);  
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  
+	  public function addplacedBidToken()
+	  {
+		  try
+		  {
+			  if($this->input->post('token') && $this->input->post('bidId') && $this->input->post('service_id'))
+			  {
+				  $check=$this->model_api->addplacedBidToken();
+				  if($check)
+				  {
+					$data['request']=true;
+					$data['message']="Invalid Request";
+					$data['request_id']=0;
+					echo json_encode($data); 
+				  }
+				  else
+				  {
+					$data['request']=true;
+					$data['message']="Invalid Request";
+					$data['request_id']=0;
+					echo json_encode($data);   
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data); 
+			  }
 		  }
 		  catch (Exception $e)
 		  {

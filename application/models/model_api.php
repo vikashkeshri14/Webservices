@@ -141,8 +141,29 @@ public function update_email_token($id)
   }
 
 
+public function valid_token()
+  {
+	  if($this->input->post("token") && $this->input->post("bidId") && $this->input->post('service_id'))  
+		 {
 
-
+			 $query=$this->db->query("select * from acceptbidtoken where token='".$this->input->post("token")."' and bid_id='".$this->input->post("bidId")."' and service_id='".$this->input->post("service_id")."' order by id desc limit 1");
+			 $value=$query->result();
+		 }
+   return $value;
+  }
+public function updateAcceptBid($id)
+  {
+      $upd['status']=1;
+	  $this->db->where('bid_id', $id); 
+	  $this->db->update('place_bids', $upd); 
+	  
+  }
+  public function addplacedBidToken()
+  {
+	  if($this->input->post('token') && $this->input->post('bidId') && $this->input->post('service_id'))
+	  {
+	  }
+  }
   public function login_check()
   {
 	   if($this->input->post('username') && $this->input->post('password'))
