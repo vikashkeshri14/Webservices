@@ -69,13 +69,17 @@ class Model_Api extends CI_Model {
 	  $this->db->insert('user', $ins); 
 	  $insert_id = $this->db->insert_id();
 	 // $time=rand(1000,9999);
-	  $email_token=$this->token();
+	  //$email_token=$this->token();
+$email_token='1234';
 	  $token_email['email_token']=$email_token;
 	  $token_email['user_id']=$insert_id;
 	  $token_email['created']=$created;
           $this->db->insert('email_token', $token_email); 
-	  mail("vkeshri.14@gmail.com","Verification token","Your token id is ".$email_token.", this is valid for 30min");
-	  $mobile_token=$this->token();
+
+	  mail("vkeshri.14@gmail.com","Verification token Code","Your token id is ".$email_token.", this is valid for 30min");
+	  
+          //$mobile_token=$this->token();
+$mobile_token='1234';
 	  $token_phone['mobile_token']=$mobile_token;
 	  $token_phone['user_id']=$insert_id;
 	  $token_phone['created']=$created;
