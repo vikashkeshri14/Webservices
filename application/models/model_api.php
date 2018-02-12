@@ -9,7 +9,7 @@ class Model_Api extends CI_Model {
   }
   public function getService()
   {
-	$query=$this->db->query("select *from service_request where status=1");
+	$query=$this->db->query("select s.service_request_id,s.user_id,s.title,s.delivery,s.attachment,u.username,st.name as service_name , CONCAT( FLOOR(HOUR(TIMEDIFF(now(), s.expiry_date)) / 24), ' days ', MOD(HOUR(TIMEDIFF(now(), s.expiry_date)), 24), ' hr ', MINUTE(TIMEDIFF(now(), s.expiry_date)), ' min') as expiry from service_request as s,user as u,service_types as st where s.status=1 and s.user_id=u.user_id and s.service_types=st.type_id ORDER BY s.service_request_id");
 	return $query->result();
   }
   public function getMyService()
@@ -73,14 +73,14 @@ class Model_Api extends CI_Model {
 	  $token_email['email_token']=$email_token;
 	  $token_email['user_id']=$insert_id;
 	  $token_email['created']=$created;
-      $this->db->insert('email_token', $token_email); 
-	 // mail("vkeshri.14@gmail.com","Verification token","Your token id is ".$email_token.", this is valid for 10min");
+          $this->db->insert('email_token', $token_email); 
+	  mail("vkeshri.14@gmail.com","Verification token","Your token id is ".$email_token.", this is valid for 30min");
 	  $mobile_token=$this->token();
 	  $token_phone['mobile_token']=$mobile_token;
 	  $token_phone['user_id']=$insert_id;
 	  $token_phone['created']=$created;
-      $this->db->insert('mobile_token', $token_phone); 
-	  return true;
+          $this->db->insert('mobile_token', $token_phone); 
+	  return $insert_id;
 	  //sms code is here
 	}
 	else
@@ -139,7 +139,16 @@ public function update_email_token($id)
 	  $this->db->update('mobile_token', $upd); 
 	  
   }
-
+public function update_user($id)
+  {
+          $upd['status']='1';
+$upd['email_token_verify']='1';
+$upd['phone_token_verify']='1';
+	  $this->db->where('user_id', $id); 
+	  $this->db->update('user', $upd); 
+return true;
+	  
+  }
 
 public function valid_token()
   {

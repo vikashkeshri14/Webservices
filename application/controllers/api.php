@@ -12,13 +12,13 @@ class Api extends CI_Controller {
 		 $this->load->model('model_api');
 	  	 $this->load->model('model_auth');
 		 $this->load->model('model_object');
-		 
-        /* $verify=$this->model_auth->auth_controller();
-		 if($verify==true)
+	  /* $verify=$this->model_auth->auth_controller();
+
+		 if($verify=='false')
 		 {
 			 redirect('auth_failed');
-		 }
-		 */
+//exit;
+		 }*/
 	  }
 	  public function user()
 	  {
@@ -205,11 +205,11 @@ class Api extends CI_Controller {
 }
 	  public function  registration()
 	  {
-		  $target_path = dirname(__FILE__).'/uploads/';
+		 /* $target_path = dirname(__FILE__).'/uploads/';
 		  if (isset($_FILES['image']['name'])) {
     $target_path = $target_path . basename($_FILES['image']['name']);
 	move_uploaded_file($_FILES['image']['tmp_name'], $target_path);
-		  }
+		  }*/
 		try
 		{
 			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no'))
@@ -219,6 +219,7 @@ class Api extends CI_Controller {
 				{
 					$data['request']=true;
 					$data['message']="Data inserted into the system. Please check the email and phone to verify your identity";
+                                        $data['data']=$res;
 					$data['request_id']=1;
 					echo json_encode($data);
 				}
@@ -267,7 +268,7 @@ class Api extends CI_Controller {
 				$registration_date_phone = date_create($date); //Replace static date with your database field
 				$expiration_date_phone = date_create($min_phone); //Replace static date with your database field
 				$phone=date_diff($registration_date_phone,$expiration_date_phone);
-                $phone_min=$phone->format("%i");
+                                $phone_min=$phone->format("%i");
 				if($email_min>=30)
 				{
 				  $data['request']=false;
@@ -285,11 +286,12 @@ class Api extends CI_Controller {
 				}
 				else
 				{
-                  $email_token=$this->model_api->update_email_token($email_token[0]->email_token_id); 
-			      $mobile_token=$this->model_api->update_mobile_token($mobile_token[0]->token_id);
+                                 $email_token=$this->model_api->update_email_token($email_token[0]->email_token_id); 
+			         $mobile_token=$this->model_api->update_mobile_token($mobile_token[0]->token_id);
+                                 $check=$this->model_api->update_user($this->input->post("user_id"));
 				  $data['request']=true;
 				  $data['message']="Verification code match";
-				  $data['request_id']=1;
+				  $data['request_id']=$check;
 				  echo json_encode($data);
 				}
 			}
