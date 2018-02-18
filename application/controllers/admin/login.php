@@ -17,7 +17,8 @@ class Login extends CI_Controller {
 	  
 	  public function index()
 	  {
-		 
+		  $data["title"]="Login Page";
+		  
 		  if($this->input->post())
 		  {
 			 // Validate the user can login
@@ -25,14 +26,17 @@ class Login extends CI_Controller {
         // Now we verify the result
         if(! $result){
             // If user did not validate, then show them login page again
-            $this->index();
+           // $this->index();
+		    $data["message"]="UserName/Password Not Found.";
+		   redirect('admin/login',$data);
         }else{
             // If user did validate, 
             // Send them to members area
-            redirect('home');
+			
+            redirect('admin/home');
         }        // echo $this->input->post('username');
 		  }
-		 $data["title"]="Login Page";
+		
 		 //$this->load->view('admin/common/header',$data);
 		 //$this->load->view('admin/common/left_menu');
 		 $this->load->view('admin/login',$data);
