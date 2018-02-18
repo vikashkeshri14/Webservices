@@ -13,24 +13,32 @@
 	{
 	try 
 		{	
-		  if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id') &&  $this->input->post('password'))
+		  if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no'))
 			  {
 				  /*--Encrypting the Password before saving*/
-				$password=$this->password_encrypt($this->input->post('password'));
+				$password=$this->randompassword(5,1,"numbers");
+				$encpassword= $this->password_encrypt($password[0]);
 				$ins['name']=$this->input->post('name');
 				$ins['username']=$this->input->post('username');
 				$ins['email_id']=$this->input->post('email_id');
 				$ins['phone_no']=$this->input->post('phone_no');
 				$ins['role_id']=1;//$this->input->post('role_id');//This will be always 1 Admin.
-				$ins['password']=$password;
-					
+				$ins['password']=$encpassword;
+					//echo $this->randompassword(5,1,"numbers");
+					//$my_passwords =$this-> randompassword(10,1,"lower_case,upper_case,numbers,special_symbols");
+ 
+//print_r($this->randompassword(5,1,"numbers"));
+					//exit;
 				if($this->input->post('iqama_id'))
 				$ins['iqama_id']=$this->input->post('iqama_id');				
 				
-				if($this->input->post('city'))	  
-				$ins['city']=$this->input->post('city');	
-				$ins['status']=$this->input->post('status');
-				$ins['created']=$created;
+					  
+				$ins['city']=$this->input->post('city_id');	
+				$ins['country']=$this->input->post('country_id');		
+				$ins['status']=1;
+				$ins['created']=date('Y-m-d H:i:s');
+				$ins['address']=$this->input->post('address');	
+				$ins['gender']=$this->input->post('gender');	
 				
 				/*--Inserting the record to Database..*/
 				$this->db->insert('user', $ins); 
@@ -52,7 +60,8 @@
    {
 	    try 
 		{	
-		  if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id') &&  $this->input->post('password'))
+		 /* if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id') &&  $this->input->post('password'))*/
+		 if($this->input->post('username'))
 			  {
 				  /*--Encrypting the Password before Updating the record*/
 				$password=$this->password_encrypt($this->input->post('password'));
@@ -60,22 +69,24 @@
 				$ins['username']=$this->input->post('username');
 				$ins['email_id']=$this->input->post('email_id');
 				$ins['phone_no']=$this->input->post('phone_no');
-				$ins['role_id']=1;//$this->input->post('role_id');//This will be always 1 Admin.
-				$ins['password']=$password;
+				$ins['role_id']=1;//$this->input->post('role_id');//This will be always 1 Admin.				
 					
 				if($this->input->post('iqama_id'))
 				$ins['iqama_id']=$this->input->post('iqama_id');
 				
 				
-				if($this->input->post('city'))	  
-				$ins['city']=$this->input->post('city');	
+					  
+				$ins['city']=$this->input->post('city_id');	
+				$ins['country']=$this->input->post('country_id');	
 			
-				$ins['updated']=$updated;
+				$ins['updated']=date('Y-m-d H:i:s');
+				$ins['address']=$this->input->post('address');	
+				$ins['gender']=$this->input->post('gender');
 				if($this->input->post('hdid'))
 				{
 					$id=$this->input->post('hdid');
 				/*--Updating the record to Database..*/
-					$this->db->where('id', $id);
+					$this->db->where('user_id', $id);
 					$this->db->update('user', $ins); 
 				}
 				else
@@ -118,7 +129,7 @@
 			if($id)
 			{
 				/*--Deleting the record from Database..*/
-				$this->db->where('id', $id);
+				$this->db->where('user_id', $id);
 				$del=$this->db->delete('user');   
 				return $del;
 			}
@@ -192,7 +203,7 @@ public function enabledisableuser()//--Enable/Disable users
 	 
 	public function password_encrypt($pass)
 	{
-		//$options = ['cost' => 11	  ];
+	$options = ['cost' => 11	 ];
 	  return password_hash($pass, PASSWORD_BCRYPT, $options);
 	}
 	
@@ -206,5 +217,41 @@ public function enabledisableuser()//--Enable/Disable users
 			  return false;
 		  }
 	}
+	
+public	function randompassword($length,$count, $characters) {
+ 
+// $length - the length of the generated password
+// $count - number of passwords to be generated
+// $characters - types of characters to be used in the password
+ 
+// define variables used within the function    
+    $symbols = array();
+    $passwords = array();
+    $used_symbols = '';
+    $pass = '';
+ 
+// an array of different character types    
+    $symbols["lower_case"] = 'abcdefghijklmnopqrstuvwxyz';
+    $symbols["upper_case"] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $symbols["numbers"] = '1234567890';
+    $symbols["special_symbols"] = '!?@#';
+ 
+    $characters = explode(",",$characters); // get characters types to be used for the passsword
+    foreach ($characters as $key=>$value) {
+        $used_symbols .= $symbols[$value]; // build a string with all characters
+    }
+    $symbols_length = strlen($used_symbols) - 1; //strlen starts from 0 so to get number of characters deduct 1
+     
+    for ($p = 0; $p < $count; $p++) {
+        $pass = '';
+        for ($i = 0; $i < $length; $i++) {
+            $n = rand(0, $symbols_length); // get a random character from the string with all characters
+            $pass .= $used_symbols[$n]; // add the character to the password string
+        }
+        $passwords[] = $pass;
+    }
+     
+    return $passwords; // return the generated password
+}
   
   }
