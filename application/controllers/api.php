@@ -12,13 +12,31 @@ class Api extends CI_Controller {
 		 $this->load->model('model_api');
 	  	 $this->load->model('model_auth');
 		 $this->load->model('model_object');
-		 
-        /* $verify=$this->model_auth->auth_controller();
-		 if($verify==true)
+	     $verify=$this->model_auth->auth_controller();
+
+		 if($verify=='false')
 		 {
 			 redirect('auth_failed');
+//exit;
 		 }
-		 */
+	  }
+	  public function user()
+	  {
+		  $check=$this->model_object->getElementByIdWhere("user","user_id",$this->input->post("user_id"));
+		  if($check)
+		  {
+			  ob_start('ob_gzhandler');
+		     $data['request']=true;
+		     $data['request_id']=1;
+			 echo  json_encode($data);
+		  }
+		  else
+		  {
+			  ob_start('ob_gzhandler');
+		     $data['request']=false;
+		     $data['request_id']=0;
+			 echo  json_encode($data);
+		  }
 	  }
 	  public function getuser()
 	  {
@@ -62,22 +80,12 @@ class Api extends CI_Controller {
 	  {
 		try
 		{
-		//if($this->input->post("usertoken")){ 
 		
 		    $data['request']="Success";
 		     $data['data']=$this->model_api->getService();
 		     $data['request_id']=1;
-			 //$data['data']=$data;
 		     echo json_encode($data);
-		/// echo json_encode();
-		/*}
-		else
-		{
-		     $data['request']="Error";
-		     $data['data']="Wrong Request";
-		     $data['request_id']=0;
-		     echo json_encode($data);
-		}*/
+	
 	  }
 		 catch (Exception $e)
 		  {
@@ -133,6 +141,7 @@ class Api extends CI_Controller {
 		     $data['request_id']=1;
 		     echo json_encode($data);
 		/// echo json_encode();
+		
 		}
 		else
 		{
@@ -186,11 +195,11 @@ class Api extends CI_Controller {
 }
 	  public function  registration()
 	  {
-		  $target_path = dirname(__FILE__).'/uploads/';
+		 /* $target_path = dirname(__FILE__).'/uploads/';
 		  if (isset($_FILES['image']['name'])) {
     $target_path = $target_path . basename($_FILES['image']['name']);
 	move_uploaded_file($_FILES['image']['tmp_name'], $target_path);
-		  }
+		  }*/
 		try
 		{
 			if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no'))
@@ -200,6 +209,7 @@ class Api extends CI_Controller {
 				{
 					$data['request']=true;
 					$data['message']="Data inserted into the system. Please check the email and phone to verify your identity";
+                    $data['user_id']=$res;
 					$data['request_id']=1;
 					echo json_encode($data);
 				}
@@ -248,7 +258,7 @@ class Api extends CI_Controller {
 				$registration_date_phone = date_create($date); //Replace static date with your database field
 				$expiration_date_phone = date_create($min_phone); //Replace static date with your database field
 				$phone=date_diff($registration_date_phone,$expiration_date_phone);
-                $phone_min=$phone->format("%i");
+                                $phone_min=$phone->format("%i");
 				if($email_min>=30)
 				{
 				  $data['request']=false;
@@ -266,11 +276,12 @@ class Api extends CI_Controller {
 				}
 				else
 				{
-                  $email_token=$this->model_api->update_email_token($email_token[0]->email_token_id); 
-			      $mobile_token=$this->model_api->update_mobile_token($mobile_token[0]->token_id);
+				   $email_token=$this->model_api->update_email_token($email_token[0]->email_token_id); 
+				   $mobile_token=$this->model_api->update_mobile_token($mobile_token[0]->token_id);
+				   $check=$this->model_api->update_user($this->input->post("user_id"));
 				  $data['request']=true;
 				  $data['message']="Verification code match";
-				  $data['request_id']=1;
+				  $data['request_id']=$check;
 				  echo json_encode($data);
 				}
 			}
@@ -319,10 +330,43 @@ class Api extends CI_Controller {
 		  if($this->input->post('username') && $this->input->post('password'))
 		  {
 			  $valid=$this->model_api->login_check();
+			  if($valid)
+			  {
+				  if($valid[0]->email_token_verify==1 && $valid[0]->phone_token_verify==1)
+				  {
+					  $token=true; 
+				  }
+				  else
+				  {
+					  $token=false;
+				  }
+				  if($valid[0]->status==1)
+				  {
+					 $status=true; 
+				  }
+				  else
+				  {
+					  $status=false; 
+				  }
+				  $data['request']=true;
+				  $data['status']=$status;
+				  $data['token']=$token;
+				  $data['message']="Username or password entered wrong";
+				  $data['user_id']=$valid[0]->user_id;
+				  $data['request_id']=1;
+				  echo json_encode($data);  
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Username or password entered wrong";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+			  }
 		  }
 		  else
 		  {
-			$data['request']="Error";
+			$data['request']=false;
 			$data['message']="Username or password entered wrong";
 			$data['request_id']=0;
 			echo json_encode($data);  
@@ -330,7 +374,7 @@ class Api extends CI_Controller {
 		  }
 		  catch (Exception $e)
 		  {
-			$data['request']="Error";
+			$data['request']=false;
 			$data['message']="Username or password entered wrong";
 			$data['request_id']=0;
 			echo json_encode($data);  
@@ -1165,6 +1209,86 @@ class Api extends CI_Controller {
 		  }
 	  }
 	   /*Comment Section End */
+	   
+	   /*Accept Bid*/
+	  public function acceptBid()
+	  {
+		  try
+		  {
+			  if($this->input->post('token') && $this->input->post('bidId') && $this->input->post('service_id'))
+			  {
+				 $valid=$this->model_api->valid_token();
+				 if($valid)
+				 {
+					$this->model_api->updateAcceptBid($this->input->post('bidId'));
+					$data['request']=true;
+					$data['message']="Bid Accept Successfully";
+					$data['request_id']=1;
+					echo json_encode($data);  
+				 }
+				 else
+				 {
+					$data['request']=false;
+					$data['message']="Invalid Request";
+					$data['request_id']=0;
+					echo json_encode($data);  
+				 }
+			  }
+			  else
+			  {
+				$data['request']=false;
+				$data['message']="Invalid Request";
+				$data['request_id']=0;
+				echo json_encode($data);  
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
+	  
+	  public function addplacedBidToken()
+	  {
+		  try
+		  {
+			  if($this->input->post('token') && $this->input->post('bidId') && $this->input->post('service_id'))
+			  {
+				  $check=$this->model_api->addplacedBidToken();
+				  if($check)
+				  {
+					$data['request']=true;
+					$data['message']="Invalid Request";
+					$data['request_id']=0;
+					echo json_encode($data); 
+				  }
+				  else
+				  {
+					$data['request']=true;
+					$data['message']="Invalid Request";
+					$data['request_id']=0;
+					echo json_encode($data);   
+				  }
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Invalid Request";
+				  $data['request_id']=0;
+				  echo json_encode($data); 
+			  }
+		  }
+		  catch (Exception $e)
+		  {
+			$data['request']=false;
+			$data['message']="Invalid Request";
+			$data['request_id']=0;
+			echo json_encode($data);  
+		  }
+	  }
 	  public function check_password()
 	  {
 		echo  $this->model_api->password_encrypt('vikash');

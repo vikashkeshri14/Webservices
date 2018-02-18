@@ -9,7 +9,7 @@ class Model_Api extends CI_Model {
   }
   public function getService()
   {
-	$query=$this->db->query("select *from service_request where status=1");
+	$query=$this->db->query("select s.service_request_id,s.user_id,s.title,s.delivery,s.attachment,u.username,st.name as service_name , CONCAT( FLOOR(HOUR(TIMEDIFF(now(), s.expiry_date)) / 24), ' days ', MOD(HOUR(TIMEDIFF(now(), s.expiry_date)), 24), ' hr ', MINUTE(TIMEDIFF(now(), s.expiry_date)), ' min') as expiry from service_request as s,user as u,service_types as st where s.status=1 and s.user_id=u.user_id and s.service_types=st.type_id ORDER BY s.service_request_id");
 	return $query->result();
   }
   public function getMyService()
@@ -51,7 +51,7 @@ class Model_Api extends CI_Model {
 	$created=date('Y-m-d h:i:s');
 	if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id') &&  $this->input->post('password'))
 	{
-	  $password=$this->password_encrypt($this->input->post('password'));
+	  $password=md5($this->input->post('password'));
 	  $ins['username']=$this->input->post('username');
 	  $ins['email_id']=$this->input->post('email_id');
 	  $ins['phone_no']=$this->input->post('phone_no');
@@ -69,18 +69,22 @@ class Model_Api extends CI_Model {
 	  $this->db->insert('user', $ins); 
 	  $insert_id = $this->db->insert_id();
 	 // $time=rand(1000,9999);
-	  $email_token=$this->token();
+	  //$email_token=$this->token();
+$email_token='1234';
 	  $token_email['email_token']=$email_token;
 	  $token_email['user_id']=$insert_id;
 	  $token_email['created']=$created;
-      $this->db->insert('email_token', $token_email); 
-	 // mail("vkeshri.14@gmail.com","Verification token","Your token id is ".$email_token.", this is valid for 10min");
-	  $mobile_token=$this->token();
+          $this->db->insert('email_token', $token_email); 
+
+	  mail("vkeshri.14@gmail.com","Verification token Code","Your token id is ".$email_token.", this is valid for 30min");
+	  
+          //$mobile_token=$this->token();
+$mobile_token='1234';
 	  $token_phone['mobile_token']=$mobile_token;
 	  $token_phone['user_id']=$insert_id;
 	  $token_phone['created']=$created;
-      $this->db->insert('mobile_token', $token_phone); 
-	  return true;
+          $this->db->insert('mobile_token', $token_phone); 
+	  return $insert_id;
 	  //sms code is here
 	}
 	else
@@ -139,26 +143,48 @@ public function update_email_token($id)
 	  $this->db->update('mobile_token', $upd); 
 	  
   }
+public function update_user($id)
+  {
+          $upd['status']='1';
+$upd['email_token_verify']='1';
+$upd['phone_token_verify']='1';
+	  $this->db->where('user_id', $id); 
+	  $this->db->update('user', $upd); 
+return true;
+	  
+  }
 
+public function valid_token()
+  {
+	  if($this->input->post("token") && $this->input->post("bidId") && $this->input->post('service_id'))  
+		 {
 
-
-
+			 $query=$this->db->query("select * from acceptbidtoken where token='".$this->input->post("token")."' and bid_id='".$this->input->post("bidId")."' and service_id='".$this->input->post("service_id")."' order by id desc limit 1");
+			 $value=$query->result();
+		 }
+   return $value;
+  }
+public function updateAcceptBid($id)
+  {
+      $upd['status']=1;
+	  $this->db->where('bid_id', $id); 
+	  $this->db->update('place_bids', $upd); 
+	  
+  }
+  public function addplacedBidToken()
+  {
+	  if($this->input->post('token') && $this->input->post('bidId') && $this->input->post('service_id'))
+	  {
+	  }
+  }
   public function login_check()
   {
 	   if($this->input->post('username') && $this->input->post('password'))
 	   {
-		   $query=$this->db->query("select * from user where  username='".trim($this->input->post('username'))."'");
+		   $query=$this->db->query("select * from user where  username='".trim($this->input->post('username'))."' and password='".md5($this->input->post('password'))."' ");
 		   $value=$query->result();
 		   if($value){
-		    $check_password=$this->password_verify($this->input->post('password'),$value[0]->password);
-			if($check_password)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return $value;
 		   }
 		   else
 		   {
@@ -496,6 +522,7 @@ public function update_email_token($id)
 		  return false;
 	  }
   }
+  
   public function ReportSpam()
   {
 	  if($this->input->post('comment_id') && $this->input->post('user_id'))
