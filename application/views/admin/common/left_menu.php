@@ -1,13 +1,14 @@
 <div id="sidebar">
 				<div id="sidebar-shortcuts">
 					<div id="sidebar-shortcuts-large">
-						<span>Welcome.. Jason</span>
+						<span>Welcome.. <?php if(is_array($this->session->userdata('userdata'))){
+			 $user_data = $this->session->userdata('userdata'); echo $user_data['name'];}?></span>
 					</div>
 
 				</div><!--#sidebar-shortcuts-->
 
 				<ul class="nav nav-list">
-					<li class="active">
+					<li <?php if($this->uri->segment(2)=='home') {?> class="active" <?php } ?> >
 						<a href="<?=base_url('index.php/admin/home')?>">
 							<i class="icon-dashboard"></i>
 							<span>Dashboard</span>
@@ -21,27 +22,27 @@
 						</a>
 					</li>-->
 
-					<li>
+					<li <?php if($this->uri->segment(2)=='viewservicerequest') {?> class="active" <?php } ?>>
 						<a href="<?=base_url('index.php/admin/viewservicerequest')?>">
 							<i class="icon-desktop"></i>
 							<span>Manage Request</span>
 						</a>
 					</li>
 
-					<li>
-						<a href="#" class="dropdown-toggle">
+					<li <?php if($this->uri->segment(2)=='viewbid') {?> class="active" <?php } ?>>
+						<a href="<?=base_url('index.php/admin/viewbid')?>" >
 							<i class="icon-desktop"></i>
 							<span>Manage BID</span>							
 						</a>
 					</li>
                     
-                    <li>
-						<a href="#" class="dropdown-toggle">
+                    <li <?php if($this->uri->segment(2)=='viewcomment') {?> class="active" <?php } ?>>
+						<a href="<?=base_url('index.php/admin/viewcomment')?>" >
 							<i class="icon-comment"></i>
 							<span>Manage Comments</span>							
 						</a>
 					</li>
-                    <li>
+                    <li <?php if($this->uri->segment(2)=='viewuser') {?> class="active" <?php } ?>>
 						<a href="#" class="dropdown-toggle">
 							<i class="icon-user"></i>
 							<span>Manage Users</span>
@@ -50,21 +51,21 @@
 						</a>
 
 						<ul class="submenu">
-                        <li>
+                        <li<?php if($this->uri->segment(3)=='adduser') {?> class="active" <?php } ?> >
 								<a href="<?=base_url('index.php/admin/viewuser/adduser')?>">
 									<i class="icon-double-angle-right"></i>
 									Add User
 								</a>
 							</li>
-							<li>
+							<li <?php if($this->uri->segment(2)=='viewuser' && $this->uri->segment(3)!='adduser') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewuser')?>">
 									<i class="icon-double-angle-right"></i>
 									View User
 								</a>
 							</li>
 						</ul>
-					</li>
-                     <li>
+					</li >
+                     <li <?php if($this->uri->segment(2)=='viewservicetype') {?> class="active" <?php } ?>>
 						<a href="#" class="dropdown-toggle">
 							<i class="icon-desktop"></i>
 							<span>Manage Service Type</span>
@@ -73,13 +74,13 @@
 						</a>
 
 						<ul class="submenu">
-                        <li>
+                        <li <?php if($this->uri->segment(3)=='addservicetype') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewservicetype/addservicetype')?>">
 									<i class="icon-double-angle-right"></i>
 									Add Service Type
 								</a>
 							</li>
-							<li>
+							<li <?php if($this->uri->segment(2)=='viewservicetype' && $this->uri->segment(3)!='addservicetype') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewservicetype')?>">
 									<i class="icon-double-angle-right"></i>
 									View Service Type
@@ -87,7 +88,7 @@
 							</li>
 						</ul>
 					</li>
-                    <li >
+                    <li <?php if($this->uri->segment(2)=='viewcountry') {?> class="active" <?php } ?>>
 						<a href="#" class="dropdown-toggle">
 							<i class="icon-globe"></i>
 							<span>Manage Country</span>
@@ -96,13 +97,13 @@
 						</a>
 
 						<ul class="submenu">
-                        <li >
+                        <li <?php if($this->uri->segment(3)=='addcountry') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewcountry/addcountry')?>">
 									<i class="icon-double-angle-right"></i>
 									Add Country
 								</a>
 							</li>
-							<li>
+							<li <?php if($this->uri->segment(2)=='viewcountry' && $this->uri->segment(3)!='addcountry') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewcountry')?>">
 									<i class="icon-double-angle-right"></i>
 									View Country
@@ -110,7 +111,7 @@
 							</li>
 						</ul>
 					</li>
-                     <li>
+                     <li <?php if($this->uri->segment(2)=='viewcity') {?> class="active" <?php } ?>>
 						<a href="#" class="dropdown-toggle">
 							<i class="icon-globe"></i>
 							<span>Manage City</span>
@@ -119,13 +120,13 @@
 						</a>
 
 						<ul class="submenu">
-                        <li>
+                        <li <?php if($this->uri->segment(3)=='addcity') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewcity/addcity')?>">
 									<i class="icon-double-angle-right"></i>
 									Add City
 								</a>
 							</li>
-							<li>
+							<li <?php if($this->uri->segment(2)=='viewcity' && $this->uri->segment(3)!='addcity') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewcity')?>">
 									<i class="icon-double-angle-right"></i>
 									View City
@@ -133,7 +134,7 @@
 							</li>
 						</ul>
 					</li>
-                     <li>
+                     <li <?php if($this->uri->segment(2)=='viewcms') {?> class="active" <?php } ?> >
 						<a href="#" class="dropdown-toggle">
 							<i class="icon-list"></i>
 							<span>Manage CMS</span>
@@ -142,13 +143,13 @@
 						</a>
 
 						<ul class="submenu">
-                        <li>
+                        <li <?php if($this->uri->segment(3)=='addcms') {?> class="active" <?php } ?>>
 								<a href="<?=base_url('index.php/admin/viewcms/addcms')?>">
 									<i class="icon-double-angle-right"></i>
 									Add CMS
 								</a>
 							</li>
-							<li>
+							<li <?php if($this->uri->segment(2)=='viewcms' && $this->uri->segment(3)!='addcms') {?> class="active" <?php } ?> >
 								<a href="<?=base_url('index.php/admin/viewcms')?>">
 									<i class="icon-double-angle-right"></i>
 									View CMS
@@ -157,7 +158,8 @@
 						</ul>
 					</li>
                     
-                    <li>
+                    <li <?php if($this->uri->segment(2)=='viewrptservicerequest' or
+					$this->uri->segment(2)=='viewrptbidsplaced') {?> class="active" <?php } ?>>
 						<a href="#" class="dropdown-toggle">
 							<i class="icon-list"></i>
 							<span>Reports</span>
@@ -178,20 +180,20 @@
 									View Rating
 								</a>
 							</li>
-                            <li>
-								<a href="elements.html">
+                            <li <?php if($this->uri->segment(2)=='viewrptservicerequest') {?> class="active" <?php } ?> >
+								<a href="<?=base_url('index.php/admin/viewrptservicerequest')?>">
 									<i class="icon-double-angle-right"></i>
 									Total Service requested
 								</a>
 							</li>
-                            <li>
-								<a href="elements.html">
+                            <li <?php if($this->uri->segment(2)=='') {?> class="active" <?php } ?>>
+								<a href="#">
 									<i class="icon-double-angle-right"></i>
 									Total Service request status
 								</a>
 							</li>
-                            <li>
-								<a href="elements.html">
+                            <li <?php if($this->uri->segment(2)=='viewrptbidsplaced') {?> class="active" <?php } ?>>
+								<a href="<?=base_url('index.php/admin/viewrptbidsplaced')?>">
 									<i class="icon-double-angle-right"></i>
 									Total Placed Bid’s Report
 								</a>

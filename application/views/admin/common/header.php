@@ -59,7 +59,8 @@
 								<!--<img class="nav-user-photo" src="<?=base_url()?>/assets/avatars/user.jpg" alt="Jason's Photo" />-->
 								<span id="user_info">
 									<small>Welcome,</small>
-									Jason
+									<?php if(is_array($this->session->userdata('userdata'))){
+			 $user_data = $this->session->userdata('userdata'); echo $user_data['name'];}?>
 								</span>
 
 								<i class="icon-caret-down"></i>
@@ -68,7 +69,7 @@
 							<ul class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer" id="user_menu">
 								
 								<li>
-									<a href="#">
+									<a href="<?=base_url('index.php/admin/viewprofile')?>">
 										<i class="icon-user"></i>
 										Profile
 									</a>
@@ -77,7 +78,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="#">
+									<a href="<?=base_url('index.php/admin/login')?>">
 										<i class="icon-off"></i>
 										Logout
 									</a>
