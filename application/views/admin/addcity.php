@@ -34,7 +34,7 @@ else
                     <i class="icon-search" id="nav-search-icon"></i>
                 </span>
             </form>
-        </div><!--#nav-search-->-->
+        </div><!--#nav-search-->
     </div>
     <div id="page-content" class="clearfix">
         <div class="page-header position-relative">

@@ -59,7 +59,7 @@ include_once('model_log.php');
 		 try
 		 {
 			//$q = $this->db->get('service_request');
-			$q=$this->db->query("SELECT sr.*,srt.name as servicetype,u.username as username FROM service_request as sr
+			$q=$this->db->query("SELECT sr.*,srt.name as servicetype,u.username as username,case sr.status when 2 then 'Disable' else 'Enable' end status FROM service_request as sr
 LEFT join service_types as srt ON srt.type_id= sr.service_types
 LEFT join user as u on u.user_id=sr.user_id");
 			$data = $q->result_array();
@@ -119,30 +119,18 @@ public function getservicerequestbyid()//-Get servicetypes by ID
 	}
 	
 	
-public function enabledisableservicerequest($id)//--Enable/Disable servicerequest
+public function enabledisableservicerequest($id,$status)//--Enable/Disable servicerequest
    {
 	    try 
 		{	
 				
-		  if($this->input->post('status'))
-			{
-				$ins['status']=$this->input->post('status');
-				if($this->input->post('hdid'))
-				{
-					$id=$this->input->post('hdid');
+		  
+				$ins['status']=$status;
 				/*--Updating the record to Database..*/
 				$this->db->where('service_request_id', $id);
 				$this->db->update('service_request', $ins); 
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			  {
-				  return false;
-			  }		
+				
+					
 		}	  
 	  catch(Exception $e)//catch exception
 		  {
