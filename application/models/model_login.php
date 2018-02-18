@@ -17,15 +17,19 @@
 	{
 		$username = trim($this->input->post('username'));
                 $password = trim($this->input->post('password'));
-		$query=$this->db->query("select *from user where username='".$username."' and password='".$password."'");
+		$query=$this->db->query("select *from user where username='".$username."' and password='".$password."' and status=1");
 		$result=$query->result();
+		//print_r($result); exit;
 		if($result)
 		{
 		   $data = array(
                     'username' => $result[0]->username,
-                    'validated' => true
+                    'validated' => true,
+					'id' => $result[0]->user_id,
+					'name' => $result[0]->name,
+					
                     );
-                   $this->session->set_userdata($data);
+                   $this->session->set_userdata('userdata',$data);
 			return true;
 		}
 		else
