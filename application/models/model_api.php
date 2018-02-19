@@ -51,7 +51,7 @@ class Model_Api extends CI_Model {
 	$created=date('Y-m-d h:i:s');
 	if($this->input->post('username') && $this->input->post('email_id') && $this->input->post('phone_no') && $this->input->post('role_id') &&  $this->input->post('password'))
 	{
-	  $password=$this->password_encrypt($this->input->post('password'));
+	  $password=md5($this->input->post('password'));
 	  $ins['username']=$this->input->post('username');
 	  $ins['email_id']=$this->input->post('email_id');
 	  $ins['phone_no']=$this->input->post('phone_no');
@@ -181,18 +181,10 @@ public function updateAcceptBid($id)
   {
 	   if($this->input->post('username') && $this->input->post('password'))
 	   {
-		   $query=$this->db->query("select * from user where  username='".trim($this->input->post('username'))."'");
+		   $query=$this->db->query("select * from user where  username='".trim($this->input->post('username'))."' and password='".md5($this->input->post('password'))."' ");
 		   $value=$query->result();
 		   if($value){
-		    $check_password=$this->password_verify($this->input->post('password'),$value[0]->password);
-			if($check_password)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return $value;
 		   }
 		   else
 		   {

@@ -12,13 +12,13 @@ class Api extends CI_Controller {
 		 $this->load->model('model_api');
 	  	 $this->load->model('model_auth');
 		 $this->load->model('model_object');
-	  /* $verify=$this->model_auth->auth_controller();
+	     $verify=$this->model_auth->auth_controller();
 
 		 if($verify=='false')
 		 {
 			 redirect('auth_failed');
 //exit;
-		 }*/
+		 }
 	  }
 	  public function user()
 	  {
@@ -80,22 +80,12 @@ class Api extends CI_Controller {
 	  {
 		try
 		{
-		//if($this->input->post("usertoken")){ 
 		
 		    $data['request']="Success";
 		     $data['data']=$this->model_api->getService();
 		     $data['request_id']=1;
-			 //$data['data']=$data;
 		     echo json_encode($data);
-		/// echo json_encode();
-		/*}
-		else
-		{
-		     $data['request']="Error";
-		     $data['data']="Wrong Request";
-		     $data['request_id']=0;
-		     echo json_encode($data);
-		}*/
+	
 	  }
 		 catch (Exception $e)
 		  {
@@ -340,10 +330,43 @@ class Api extends CI_Controller {
 		  if($this->input->post('username') && $this->input->post('password'))
 		  {
 			  $valid=$this->model_api->login_check();
+			  if($valid)
+			  {
+				  if($valid[0]->email_token_verify==1 && $valid[0]->phone_token_verify==1)
+				  {
+					  $token=true; 
+				  }
+				  else
+				  {
+					  $token=false;
+				  }
+				  if($valid[0]->status==1)
+				  {
+					 $status=true; 
+				  }
+				  else
+				  {
+					  $status=false; 
+				  }
+				  $data['request']=true;
+				  $data['status']=$status;
+				  $data['token']=$token;
+				  $data['message']="Username or password entered wrong";
+				  $data['user_id']=$valid[0]->user_id;
+				  $data['request_id']=1;
+				  echo json_encode($data);  
+			  }
+			  else
+			  {
+				  $data['request']=false;
+				  $data['message']="Username or password entered wrong";
+				  $data['request_id']=0;
+				  echo json_encode($data);
+			  }
 		  }
 		  else
 		  {
-			$data['request']="Error";
+			$data['request']=false;
 			$data['message']="Username or password entered wrong";
 			$data['request_id']=0;
 			echo json_encode($data);  
@@ -351,7 +374,7 @@ class Api extends CI_Controller {
 		  }
 		  catch (Exception $e)
 		  {
-			$data['request']="Error";
+			$data['request']=false;
 			$data['message']="Username or password entered wrong";
 			$data['request_id']=0;
 			echo json_encode($data);  
